@@ -307,16 +307,14 @@ public class JobIntegrationTest {
         Assert.fail("NIY"); // TODO
     }
 
-//        it 'exposes failing a job' do
-//          queue.put('Foo', {}, jid: 'jid')
-//          queue.pop.fail('foo', 'message')
-//          expect(client.jobs['jid'].state).to eq('failed')
-//          expect(client.jobs['jid'].failure['group']).to eq('foo')
-//          expect(client.jobs['jid'].failure['message']).to eq('message')
-//        end
     @Test
-    public void exposesFailingAJob() {
-        Assert.fail("NIY"); // TODO
+    public void exposesFailingAJob() throws IOException {
+        Queue queue = client.queues("foo");
+        String jid = queue.put("Foo", null, null);
+        queue.pop().fail("foo", "message");
+        Assert.assertEquals("failed", client.jobs(jid).state());
+        Assert.assertEquals("foo", client.jobs(jid).failure("group"));
+        Assert.assertEquals("message", client.jobs(jid).failure("message"));
     }
 
 //        it 'only invokes before_complete on an already-completed job' do

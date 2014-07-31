@@ -40,10 +40,6 @@ public class Job {
     @JsonProperty
     @JsonDeserialize(using=JobDataDeserializer.class)
     protected Map<String,Object> data;
-    
-    @JsonProperty
-    @JsonDeserialize(using=LuaStringArrayDeserializer.class)
-    protected List<String> tags;
 
     @JsonProperty
     @JsonDeserialize(using=LuaStringArrayDeserializer.class)
@@ -52,6 +48,13 @@ public class Job {
     @JsonProperty
     @JsonDeserialize(using=LuaStringArrayDeserializer.class)
     protected List<String> dependencies;
+    
+    @JsonProperty
+    protected Map<String,Object> failure;
+    
+    @JsonProperty
+    @JsonDeserialize(using=LuaStringArrayDeserializer.class)
+    protected List<String> tags;
 
     @JsonProperty
     protected String jid;
@@ -141,6 +144,14 @@ public class Job {
     
     public List<String> dependencies() {
         return dependencies;
+    }
+    
+    public void fail(String group, String message) throws IOException {
+        client.call("fail",  jid, client.workerName(), group, message, JSON.stringify(data));
+    }
+    
+    public Object failure(String group) {
+        return this.failure.get(group);
     }
     
     public String jid() {
