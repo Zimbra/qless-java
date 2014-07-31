@@ -120,14 +120,12 @@ public class JobIntegrationTest {
         Assert.fail("NIY"); // TODO
     }
 
-//        it 'exposes its cancel method' do
-//          queue.put('Foo', {}, jid: 'jid')
-//          client.jobs['jid'].cancel
-//          expect(client.jobs['jid']).to_not be
-//        end
     @Test
-    public void exposesItsCancelMethod() {
-        Assert.fail("NIY"); // TODO
+    public void exposesItsCancelMethod() throws IOException {
+        Queue queue = client.queues("foo");
+        String jid = queue.put("Foo", null, null);
+        client.jobs(jid).cancel();
+        Assert.assertEquals(null, client.jobs(jid));
     }
 
     @Test

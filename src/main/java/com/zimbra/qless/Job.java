@@ -96,6 +96,10 @@ public class Job {
         this.client = client;
     }
     
+    public void cancel() throws IOException {
+        client.call("cancel",  jid);
+    }
+    
     public void complete() throws IOException {
         complete(null);
     }
