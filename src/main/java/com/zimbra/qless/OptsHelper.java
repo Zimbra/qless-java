@@ -37,14 +37,18 @@ class OptsHelper {
         return value.toString();
     }
     
-    @SuppressWarnings("unchecked")
     public static List<String> getList(Map<String, Object> opts, String opt) {
+        return getList(opts, opt, new ArrayList<String>());
+    }
+    
+    @SuppressWarnings("unchecked")
+    public static List<String> getList(Map<String, Object> opts, String opt, List<String> defaultValue) {
         if (opts == null) {
-            return new ArrayList<String>();
+            return defaultValue;
         }
         Object value = opts.get(opt);
         if (value == null) {
-            return new ArrayList<String>();
+            return defaultValue;
         }
         return (List<String>)value;
     }

@@ -167,18 +167,13 @@ public class JobIntegrationTest {
         Assert.assertEquals("bar", job.data("foo"));
     }
 
-//        it 'can move itself' do
-//          queue.put('Foo', {}, jid: 'jid')
-//          client.jobs['jid'].requeue('bar')
-//          expect(client.jobs['jid'].queue_name).to eq('bar')
-//        end
     @Test
     public void canMoveItself() throws IOException {
-        Assert.fail("NIY"); // TODO
-//        Queue queue = client.queues("foo");
-//        String jid = queue.put("Foo", null, null);
-//        client.jobs(jid).requeue("bar");
-//        Assert.assertEquals("bar", client.jobs(jid).queueName());
+        Queue queue = client.queues("foo");
+        String jid = queue.put("Foo", null, null);
+        client.jobs(jid).requeue("bar");
+        Assert.assertEquals("bar", client.jobs(jid).queue().name());
+        Assert.assertEquals("bar", client.jobs(jid).queueName());
     }
 
 //        it 'fails when requeing a cancelled job' do

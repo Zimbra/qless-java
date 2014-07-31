@@ -191,16 +191,19 @@ public class Job {
         return queueName;
     }
     
-//    public String requeue(String queue, Map<String,Object> opts) throws IOException {
-//        // TODO note_state_change :requeue
-//        return (String)qlessClient.call("requeue", qlessClient.workerName(), queue, jid, klassName,
-//                new ObjectMapper().writeValueAsString(data),
-//                "delay", OptsHelper.get(opts, "delay", "0"),
-//                "priority", OptsHelper.get(opts, "priority", Integer.toString(priority)),
-////                "tags", "{}", // TODO
-//                "retries", OptsHelper.get(opts, "retries", "5"));
-////                "depends", "[]"); // TODO
-//    }
+    public void requeue(String queue) throws IOException {
+        requeue(queue, null);
+    }
+    
+    public void requeue(String queue, Map<String,Object> opts) throws IOException {
+        client.call("requeue", client.workerName(), queue, jid, klassName,
+                JSON.stringify(data),
+                OptsHelper.get(opts, "delay", "0"),
+                "priority", OptsHelper.get(opts, "priority", Integer.toString(priority)),
+                "tags", JSON.stringify(tags),
+                "retries", OptsHelper.get(opts, "retries", "5"),
+                "depends", JSON.stringify(OptsHelper.getList(opts, "depends", dependencies())));
+    }
     
     public String state() {
         return state;

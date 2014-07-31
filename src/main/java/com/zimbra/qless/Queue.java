@@ -69,10 +69,9 @@ public class Queue {
                 data == null ? "{}": JSON.stringify(data),
                 OptsHelper.get(opts, "delay", "0"),
                 OptsHelper.get(opts, "priority", "0"),
-//                "tags", "{}", // TODO
+                "tags", JSON.stringify(OptsHelper.getList(opts, "tags")),
                 OptsHelper.get(opts, "retries", "5"),
                 "depends", JSON.stringify(OptsHelper.getList(opts, "depends")));
-//                "depends", "[]"); // TODO
     }
     
 
@@ -106,7 +105,7 @@ public class Queue {
                 JSON.stringify(data),
                 "interval", "" + interval, OptsHelper.get(opts, "offset", "0"),
                 OptsHelper.get(opts, "priority", "0"),
-                "tags", "[]", // TODO
+                "tags", JSON.stringify(OptsHelper.getList(opts, "tags")),
                 OptsHelper.get(opts, "retries", "5"),
                 OptsHelper.get(opts, "backlog", "0"));
     }
