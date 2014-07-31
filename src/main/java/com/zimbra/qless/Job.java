@@ -17,6 +17,7 @@ package com.zimbra.qless;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -106,7 +107,13 @@ public class Job {
             @SuppressWarnings("unused")
             Object retval = client.call("complete", jid, client.workerName(), queueName, JSON.stringify(data));
         } else {
-            throw new UnsupportedOperationException("NIY"); // TODO
+            @SuppressWarnings("unused")
+            
+            Object retval = client.call("complete", jid, client.workerName(), queueName, JSON.stringify(data),
+                    "next", nextQueue,
+                    "delay", OptsHelper.get(opts, "delay", "0"),
+                    "depends", JSON.stringify(OptsHelper.getList(opts, "depends"))
+                    );
         }
     }
     

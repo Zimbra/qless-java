@@ -14,6 +14,8 @@
 
 package com.zimbra.qless;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 
@@ -33,5 +35,17 @@ class OptsHelper {
             return defaultValue;
         }
         return value.toString();
+    }
+    
+    @SuppressWarnings("unchecked")
+    public static List<String> getList(Map<String, Object> opts, String opt) {
+        if (opts == null) {
+            return new ArrayList<String>();
+        }
+        Object value = opts.get(opt);
+        if (value == null) {
+            return new ArrayList<String>();
+        }
+        return (List<String>)value;
     }
 }

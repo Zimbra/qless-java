@@ -204,14 +204,12 @@ public class JobIntegrationTest {
         Assert.assertEquals("complete", client.jobs(jid).state());
     }
 
-//        it 'can advance itself to another queue' do
-//          queue.put('Foo', {}, jid: 'jid')
-//          queue.pop.complete('bar')
-//          expect(client.jobs['jid'].state).to eq('waiting')
-//        end
     @Test
-    public void canAdvanceItselfToAnotherQueue() {
-        Assert.fail("NIY"); // TODO
+    public void canAdvanceItselfToAnotherQueue() throws IOException {
+        Queue queue = client.queues("foo");
+        String jid = queue.put("Foo", null, null);
+        queue.pop().complete("bar");
+        Assert.assertEquals("waiting", client.jobs(jid).state());
     }
 
 //        it 'can heartbeat itself' do
