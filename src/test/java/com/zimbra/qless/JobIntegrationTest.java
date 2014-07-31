@@ -365,7 +365,9 @@ public class JobIntegrationTest {
 //        end
 //      end
     @Test
-    public void returnsNullFromSpawnedFromWhenItIsNotARecurringJob() {
-        Assert.fail("NIY"); // TODO
+    public void returnsNullFromSpawnedFromWhenItIsNotARecurringJob() throws IOException {
+        Queue queue = client.queues("foo");
+        String jid = queue.put("Foo", null, null);
+        Assert.assertEquals(null, client.jobs(jid).spawnedFrom());
     }
 }

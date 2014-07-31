@@ -81,6 +81,9 @@ public class Job {
     @JsonProperty(value="remaining")
     protected int retriesLeft;
     
+    @JsonProperty(value="spawned_from_jid")
+    protected String spawnedFromJid;
+    
     @JsonProperty
     protected String state = "running";
     
@@ -227,6 +230,10 @@ public class Job {
     
     public int retriesLeft() {
         return retriesLeft;
+    }
+    
+    public String spawnedFrom() {
+        return spawnedFromJid;
     }
     
     public String state() {
