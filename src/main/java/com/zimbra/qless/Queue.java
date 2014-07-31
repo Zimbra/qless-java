@@ -74,7 +74,6 @@ public class Queue {
                 "depends", JSON.stringify(OptsHelper.getList(opts, "depends")));
     }
     
-
     /**
      * Make a recurring job in this queue
      * Options include:
@@ -83,31 +82,16 @@ public class Queue {
      * => retries (int)
      * => offset (int)
      */
-//    def recur(klass, data, interval, opts = {})
-//      opts = job_options(klass, data, opts)
-//      @client.call(
-//        'recur',
-//        @name,
-//        (opts[:jid] || Qless.generate_jid),
-//        klass.is_a?(String) ? klass : klass.name,
-//        JSON.generate(data),
-//        'interval', interval, opts.fetch(:offset, 0),
-//        'priority', opts.fetch(:priority, 0),
-//        'tags', JSON.generate(opts.fetch(:tags, [])),
-//        'retries', opts.fetch(:retries, 5),
-//        'backlog', opts.fetch(:backlog, 0)
-//      )
-//    end
     public String recur(String klass, Object data, int interval, Map<String,Object> opts) throws IOException {
         return (String)client.call("recur", name,
                 OptsHelper.get(opts, "jid", client.generateJid()),
                 klass,
                 JSON.stringify(data),
-                "interval", "" + interval, OptsHelper.get(opts, "offset", "0"),
-                OptsHelper.get(opts, "priority", "0"),
+                "interval", Integer.toString(interval), OptsHelper.get(opts, "offset", "0"),
+                "priority", OptsHelper.get(opts, "priority", "0"),
                 "tags", JSON.stringify(OptsHelper.getList(opts, "tags")),
-                OptsHelper.get(opts, "retries", "5"),
-                OptsHelper.get(opts, "backlog", "0"));
+                "retries", OptsHelper.get(opts, "retries", "5"),
+                "backlog", OptsHelper.get(opts, "backlog", "0"));
     }
     
     String workerName() {
