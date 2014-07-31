@@ -1,0 +1,1 @@
+{"jid":"77687e485b0442c6b043c52620bac347","retries":5,"data":"{}","failure":{},"expires":0,"remaining":5,"spawned_from_jid":false,"dependencies":{},"klass":"foo","tracked":false,"tags":{},"queue":"Foo","state":"waiting","history":[{"when":1406824938,"q":"Foo","what":"put"}],"dependents":{},"priority":0,"worker":""}

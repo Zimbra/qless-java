@@ -83,7 +83,8 @@ public class JobIntegrationTest {
         Map<String, Object> opts = new HashMap<>();
         opts.put("jid", "jid");
         opts.put("priority", 0);
-        String jid = queue.put("foo", null, opts);
+        @SuppressWarnings("unused")
+        String jid = queue.put("Foo", null, opts);
         Assert.assertEquals(0, client.jobs("jid").priority());
         client.jobs("jid").priority(10);
         Assert.assertEquals(10, client.jobs("jid").priority());
@@ -92,9 +93,7 @@ public class JobIntegrationTest {
     @Test
     public void exposesItsQueueObject() throws IOException {
         Queue queue = client.queues("foo");
-        Map<String, Object> opts = new HashMap<>();
-        opts.put("jid", "jid");
-        String jid = queue.put("foo", null, opts);
+        String jid = queue.put("Foo", null, null);
         Job job = client.jobs(jid);
         Assert.assertEquals(job.queueName(), job.queue().name());
         Assert.assertTrue(job.queue() instanceof Queue);
@@ -144,7 +143,7 @@ public class JobIntegrationTest {
         Map<String, Object> opts = new HashMap<>();
         opts.put("jid", "jid");
         opts.put("tags", Arrays.asList("foo"));
-        String jid = queue.put("foo", null, opts);
+        String jid = queue.put("Foo", null, opts);
         client.jobs(jid).untag("foo");
         Assert.assertEquals(0, client.jobs(jid).tags().size());
     }
@@ -154,14 +153,14 @@ public class JobIntegrationTest {
         Queue queue = client.queues("foo");
         Map<String, Object> data = new HashMap<>();
         data.put("whiz",  "bang");
-        String jid = queue.put("foo", data, null);
+        String jid = queue.put("Foo", data, null);
         Assert.assertEquals("bang", client.jobs(jid).data("whiz"));
     }
 
     @Test
     public void exposesDataAssignment() throws IOException {
         Queue queue = client.queues("foo");
-        String jid = queue.put("foo", null, null);
+        String jid = queue.put("Foo", null, null);
         Job job = client.jobs(jid);
         job.data("foo", "bar");
         Assert.assertEquals("bar", job.data("foo"));
@@ -176,7 +175,7 @@ public class JobIntegrationTest {
     public void canMoveItself() throws IOException {
         Assert.fail("NIY"); // TODO
 //        Queue queue = client.queues("foo");
-//        String jid = queue.put("foo", null, null);
+//        String jid = queue.put("Foo", null, null);
 //        client.jobs(jid).requeue("bar");
 //        Assert.assertEquals("bar", client.jobs(jid).queueName());
     }
@@ -279,14 +278,12 @@ public class JobIntegrationTest {
         Assert.fail("NIY"); // TODO
     }
 
-//        it 'has a reasonable to_s' do
-//          queue.put('Foo', {}, jid: 'jid')
-//          expect(client.jobs['jid'].to_s).to eq(
-//            '<Qless::Job Foo (jid / foo / waiting)>')
-//        end
     @Test
-    public void hasAReasonableToString() {
-        Assert.fail("NIY"); // TODO
+    public void hasAReasonableToString() throws IOException {
+        Queue queue = client.queues("foo");
+        String jid = queue.put("Foo", null, null);
+        String s = client.jobs(jid).toString();
+        Assert.assertTrue(s.contains("Foo (" + jid + " / foo / waiting)"));
     }
 
 //        it 'fails to process if it does not have the method' do

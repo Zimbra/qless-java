@@ -15,9 +15,7 @@
 package com.zimbra.qless;
 
 import java.io.IOException;
-import java.util.HashMap;
 
-import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.DeserializationConfig.Feature;
 import org.codehaus.jackson.map.InjectableValues;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -34,7 +32,7 @@ public class ClientJobs {
     }
     
     public Job get(String jid) throws IOException {
-        Class<?> klass = Job.class;
+        Class<? extends Job> klass = Job.class;
         Object result = client.call("get", jid);
         if (result == null) {
             result = client.call("recur.get", jid);
@@ -44,14 +42,8 @@ public class ClientJobs {
             klass = RecurringJob.class;
         }
         
-        // 1st pass - instantiate a Job from returned keys
+        String json = result.toString();
         InjectableValues inject = new InjectableValues.Std().addValue("client", client);
-        Job job = objectMapper.reader(klass).withInjectableValues(inject).readValue(result.toString());
-        
-        // 2nd pass - instantiate data member
-        JsonNode jsonNode = objectMapper.readTree(result.toString());
-        String jsonData = jsonNode.path("data").asText();
-        job.data = objectMapper.reader(HashMap.class).readValue(jsonData);
-        return job;
+        return JSON.parse(json, klass, inject);
     }
 }

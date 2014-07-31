@@ -17,7 +17,6 @@ package com.zimbra.qless;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,29 +26,67 @@ import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.annotate.JacksonInject;
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
+
+import com.google.common.base.Objects.ToStringHelper;
+import com.zimbra.qless.map.JobDataDeserializer;
+import com.zimbra.qless.map.LuaStringArrayDeserializer;
 
 
 public class Job {
-    @JacksonInject
-    @JsonIgnore
+    @JsonIgnore @JacksonInject
     protected transient Client client;
     
     @JsonIgnore
     protected transient Queue queue;
     
-    @JsonSerialize(as=HashMap.class, include=JsonSerialize.Inclusion.NON_NULL)
+    @JsonProperty
+    @JsonDeserialize(using=JobDataDeserializer.class)
     protected Map<String,Object> data;
-
-    @JsonProperty protected String jid;
-    @JsonProperty protected int priority;
-    @JsonProperty protected String queueName;
-    @JsonProperty protected String state = "running";
-    @JsonProperty protected boolean tracked;
     
-//    @JsonSerialize(as=ArrayList.class, include=JsonSerialize.Inclusion.NON_NULL)
-    @JsonDeserialize(using=JSON.TagsDeserializer.class)
-    @JsonProperty protected List<String> tags;
+    @JsonProperty
+    @JsonDeserialize(using=LuaStringArrayDeserializer.class)
+    protected List<String> tags;
+
+    @JsonProperty
+    @JsonDeserialize(using=LuaStringArrayDeserializer.class)
+    protected List<String> dependents;
+
+    @JsonProperty
+    @JsonDeserialize(using=LuaStringArrayDeserializer.class)
+    protected List<String> dependencies;
+
+    @JsonProperty
+    protected String jid;
+    
+    @JsonProperty(value="expires")
+    protected int expiresAt;
+    
+    @JsonProperty
+    protected List<History> history;
+
+    @JsonProperty(value="klass")
+    protected String klassName;
+    
+    @JsonProperty
+    protected int priority;
+    
+    @JsonProperty(value="queue")
+    protected String queueName;
+    
+    @JsonProperty(value="retries")
+    protected int originalRetries;
+    
+    @JsonProperty(value="remaining")
+    protected int retriesLeft;
+    
+    @JsonProperty
+    protected String state = "running";
+    
+    @JsonProperty
+    protected boolean tracked;
+    
+    @JsonProperty(value="worker")
+    protected String workerName;
     
     
     @JsonCreator
@@ -95,7 +132,7 @@ public class Job {
     }
     
     public void priority(int priority) throws IOException {
-        Object retval = client.call("priority", jid, Integer.toString(priority));
+        client.call("priority", jid, Integer.toString(priority));
         this.priority = priority;
     }
     
@@ -163,5 +200,27 @@ public class Job {
     
     public List<String> tags() {
         return tags;
+    }
+    
+    public String toString() {
+        return new StringBuilder()
+            .append(getClass().getName())
+            .append(' ').append(klassName)
+            .append(" (") 
+            .append(jid).append(" / ").append(queueName()).append(" / ").append(state)
+            .append(')')
+            .toString();
+    }
+    
+    
+    public static class History {
+        @JsonProperty
+        public int when;
+        
+        @JsonProperty(value="q")
+        public String queueName;
+        
+        @JsonProperty
+        public String what;
     }
 }

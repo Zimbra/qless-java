@@ -15,37 +15,23 @@
 package com.zimbra.qless;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.JsonParser;
-import org.codehaus.jackson.JsonProcessingException;
-import org.codehaus.jackson.map.DeserializationContext;
-import org.codehaus.jackson.map.JsonDeserializer;
+import org.codehaus.jackson.map.DeserializationConfig.Feature;
+import org.codehaus.jackson.map.InjectableValues;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.type.JavaType;
 
 
 
 
 public class JSON {
-    static ObjectMapper objectMapper = new ObjectMapper();
     
+    public static <T> T parse(String json, Class<T> klass) throws IOException {
+        return parse(json, klass, new InjectableValues.Std());
+    }
     
-    /**
-     * Redis returns tags as an array when there's at least one, but {} when there's none.
-     * Jackson doesn't have a built-in feature for that type of curious behavior. 
-     */
-    public static class TagsDeserializer extends JsonDeserializer<List<String>> {
-        @Override
-        public List<String> deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
-            JsonNode node = jp.getCodec().readTree(jp);
-            if ("{}".equals(node.toString())) {
-                return new ArrayList<String>();
-            }
-            JavaType type = new ObjectMapper().getTypeFactory().constructCollectionType(List.class, String.class);
-            return new ObjectMapper().reader(type).readValue(node.toString());
-        }
+    public static <T> T parse(String json, Class<T> klass, InjectableValues injectables) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        return mapper.reader(klass).withInjectableValues(injectables).readValue(json);
     }
 }
