@@ -17,6 +17,7 @@ package com.zimbra.qless;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -154,8 +155,20 @@ public class Job {
         return this.failure.get(group);
     }
     
+    public List<History> history() {
+        return history;
+    }
+    
     public String jid() {
         return jid;
+    }
+    
+    public void log(String message) throws IOException {
+        client.call("log",  jid, message);
+    }
+    
+    public void log(String message, Map<String,Object> data) throws IOException {
+        client.call("log",  jid, message, JSON.stringify(data));
     }
     
     public int priority() {
@@ -255,14 +268,22 @@ public class Job {
     }
     
     
-    public static class History {
-        @JsonProperty
-        public int when;
+    @SuppressWarnings("serial")
+    public static class History extends HashMap<String,Object> {
+        public Integer when() {
+            Object value = get("when");
+            if (value != null) {
+                return new Integer(value.toString());
+            }
+            return null;
+        }
         
-        @JsonProperty(value="q")
-        public String queueName;
+        public String queueName() {
+            return (String)get("q");
+        }
         
-        @JsonProperty
-        public String what;
+        public Object what() {
+            return get("what");
+        }
     }
 }

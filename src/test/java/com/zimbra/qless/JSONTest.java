@@ -41,7 +41,8 @@ public class JSONTest {
         Assert.assertEquals(5, job.originalRetries);
         Assert.assertNotNull(job.data); 
         Assert.assertEquals(true, job.data.isEmpty());
-        //TODO:failure
+        Assert.assertNotNull(job.failure); 
+        Assert.assertEquals(true, job.failure.isEmpty()); 
         Assert.assertEquals(0, job.expiresAt);
         Assert.assertEquals(5, job.retriesLeft);
         //TODO:spawned_from_jid
@@ -55,9 +56,10 @@ public class JSONTest {
         Assert.assertEquals("waiting", job.state);
         Assert.assertNotNull(job.history); 
         Assert.assertEquals(1, job.history.size()); 
-        Assert.assertEquals(1406824938, job.history.get(0).when);
-        Assert.assertEquals("Foo", job.history.get(0).queueName);
-        Assert.assertEquals("put", job.history.get(0).what);
+        Assert.assertNotNull(job.history.get(0).when()); 
+        Assert.assertEquals(1406824938L, job.history.get(0).when().longValue());
+        Assert.assertEquals("Foo", job.history.get(0).queueName());
+        Assert.assertEquals("put", job.history.get(0).what());
         Assert.assertNotNull(job.dependents); 
         Assert.assertEquals(0, job.dependents.size()); 
         Assert.assertEquals(0, job.priority);

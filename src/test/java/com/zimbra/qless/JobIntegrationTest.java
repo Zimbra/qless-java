@@ -17,6 +17,7 @@ package com.zimbra.qless;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import junit.framework.Assert;
@@ -337,18 +338,19 @@ public class JobIntegrationTest {
         Assert.fail("NIY"); // TODO
     }
 
-//        it 'provides access to #log' do
-//          queue.put('Foo', {}, jid: 'jid')
-//          # Both with and without data
-//          client.jobs['jid'].log('hello')
-//          client.jobs['jid'].log('hello', { foo: 'bar'} )
-//          history = client.jobs['jid'].raw_queue_history
-//          expect(history[1]['what']).to eq('hello')
-//          expect(history[2]['foo']).to eq('bar')
-//        end
     @Test
-    public void providesAccessToLog() {
-        Assert.fail("NIY"); // TODO
+    public void providesAccessToLog() throws IOException {
+        Queue queue = client.queues("foo");
+        String jid = queue.put("Foo", null, null);
+        client.jobs(jid).log("hello");
+        Map<String,Object> data = new HashMap<>();
+        data.put("foo", "bar");
+        client.jobs(jid).log("hello", data);
+        List<Job.History> history = client.jobs(jid).history(); 
+        Assert.assertNotNull(history);
+        Assert.assertEquals(3, history.size());
+        Assert.assertEquals("hello", history.get(1).what());
+        Assert.assertEquals("bar", history.get(2).get("foo"));
     }
 
 //        it 'returns the source recurring job from `spawned_from`' do
