@@ -52,30 +52,32 @@ public class JobIntegrationTest {
         Assert.assertEquals("a",  jid);
     }
     
-//        it 'has all the attributes we would expect' do
-//          queue.put('Foo', { whiz: 'bang' }, jid: 'jid', tags: ['foo'], retries: 3)
-//          job = client.jobs['jid']
-//          expected = {
-//            jid: 'jid',
-//            data: { 'whiz' => 'bang' },
-//            tags: ['foo'],
-//            priority: 0,
-//            expires_at: 0,
-//            dependents: [],
-//            klass_name: 'Foo',
-//            queue_name: 'foo',
-//            worker_name: '',
-//            retries_left: 3,
-//            dependencies: [],
-//            original_retries: 3,
-//          }
-//          expected.each do |key, value|
-//            expect(job.send(key)).to eq(value)
-//          end
-//        end
     @Test
-    public void hasExpectedAttributes() {
-        Assert.fail("NIY"); // TODO
+    @SuppressWarnings("rawtypes")
+    public void hasExpectedAttributes() throws IOException {
+        Queue queue = client.queues("foo");
+        Map<String, Object> data = new HashMap<>();
+        data.put("whiz",  "bang");
+        Map<String, Object> opts = new HashMap<>();
+        opts.put("jid", "jid");
+        opts.put("tags", Arrays.asList("foo"));
+        opts.put("retries", "3");
+         String jid = queue.put("Foo", data, opts);
+        Job job = client.jobs(jid);
+        Assert.assertEquals("jid", job.jid());
+        Assert.assertNotNull(job.data());
+        Assert.assertTrue(job.data() instanceof Map);
+        Assert.assertEquals("bang", ((Map)job.data()).get("whiz"));
+        Assert.assertEquals("[\"foo\"]", JSON.stringify(job.tags()));
+        Assert.assertEquals(0, job.priority());
+        Assert.assertEquals(0, job.expiresAt());
+        Assert.assertEquals("[]", JSON.stringify(job.dependents()));
+        Assert.assertEquals("Foo", job.klassName());
+        Assert.assertEquals("foo", job.queueName());
+        Assert.assertEquals("", job.workerName());
+        Assert.assertEquals(3, job.retriesLeft());
+        Assert.assertEquals("[]", JSON.stringify(job.dependencies()));
+        Assert.assertEquals(3, job.originalRetries());
     }
 
     @Test

@@ -97,7 +97,7 @@ public class Job {
     }
     
     public void cancel() throws IOException {
-        client.call("cancel",  jid);
+        client.call("cancel", jid);
     }
     
     public void complete() throws IOException {
@@ -151,8 +151,16 @@ public class Job {
         return dependencies;
     }
     
+    public List<String> dependents() {
+        return dependents;
+    }
+    
+    public int expiresAt() {
+        return expiresAt;
+    }
+    
     public void fail(String group, String message) throws IOException {
-        client.call("fail",  jid, client.workerName(), group, message, JSON.stringify(data));
+        client.call("fail", jid, client.workerName(), group, message, JSON.stringify(data));
     }
     
     public Object failure(String group) {
@@ -167,12 +175,20 @@ public class Job {
         return jid;
     }
     
+    public String klassName() {
+        return klassName;
+    }
+    
     public void log(String message) throws IOException {
         client.call("log",  jid, message);
     }
     
     public void log(String message, Map<String,Object> data) throws IOException {
         client.call("log",  jid, message, JSON.stringify(data));
+    }
+    
+    public int originalRetries() {
+        return originalRetries;
     }
     
     public int priority() {
@@ -204,9 +220,13 @@ public class Job {
                 JSON.stringify(data),
                 OptsHelper.get(opts, "delay", "0"),
                 "priority", OptsHelper.get(opts, "priority", Integer.toString(priority)),
-                "tags", JSON.stringify(tags),
+                "tags", JSON.stringify(OptsHelper.getList(opts, "tags", tags)),
                 "retries", OptsHelper.get(opts, "retries", "5"),
                 "depends", JSON.stringify(OptsHelper.getList(opts, "depends", dependencies())));
+    }
+    
+    public int retriesLeft() {
+        return retriesLeft;
     }
     
     public String state() {
@@ -224,6 +244,10 @@ public class Job {
         client.call("tag", args);
     }
     
+    public List<String> tags() {
+        return tags;
+    }
+    
     public void track() throws IOException {
         client.call("track", "track", jid);
         tracked = true;
@@ -231,6 +255,16 @@ public class Job {
     
     public boolean tracked() {
         return tracked;
+    }
+    
+    public String toString() {
+        return new StringBuilder()
+            .append(getClass().getName())
+            .append(' ').append(klassName)
+            .append(" (") 
+            .append(jid).append(" / ").append(queueName()).append(" / ").append(state)
+            .append(')')
+            .toString();
     }
     
     public void undepend(String... jids) throws IOException {
@@ -260,18 +294,8 @@ public class Job {
         tracked = false;
     }
     
-    public List<String> tags() {
-        return tags;
-    }
-    
-    public String toString() {
-        return new StringBuilder()
-            .append(getClass().getName())
-            .append(' ').append(klassName)
-            .append(" (") 
-            .append(jid).append(" / ").append(queueName()).append(" / ").append(state)
-            .append(')')
-            .toString();
+    public String workerName() {
+        return workerName;
     }
     
     
