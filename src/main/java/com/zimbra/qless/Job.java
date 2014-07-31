@@ -17,7 +17,6 @@ package com.zimbra.qless;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -129,6 +128,21 @@ public class Job {
         return data.put(key, value);
     }
     
+    public void depend(String... jids) throws IOException {
+        List<String> args = new ArrayList<>();
+        args.addAll(Arrays.asList(jid, "on"));
+        for (String jid: jids) {
+            args.add(jid);
+        }
+        String[] array = new String[args.size()];
+        args.toArray(array);
+        client.call("depends", array);
+    }
+    
+    public List<String> dependencies() {
+        return dependencies;
+    }
+    
     public String jid() {
         return jid;
     }
@@ -186,6 +200,17 @@ public class Job {
     
     public boolean tracked() {
         return tracked;
+    }
+    
+    public void undepend(String... jids) throws IOException {
+        List<String> args = new ArrayList<>();
+        args.addAll(Arrays.asList(jid, "off"));
+        for (String jid: jids) {
+            args.add(jid);
+        }
+        String[] array = new String[args.size()];
+        args.toArray(array);
+        client.call("depends", array);
     }
     
     public void untag(String... tags) throws IOException {

@@ -70,7 +70,8 @@ public class Queue {
                 OptsHelper.get(opts, "delay", "0"),
                 OptsHelper.get(opts, "priority", "0"),
 //                "tags", "{}", // TODO
-                OptsHelper.get(opts, "retries", "5"));
+                OptsHelper.get(opts, "retries", "5"),
+                "depends", JSON.stringify(OptsHelper.getList(opts, "depends")));
 //                "depends", "[]"); // TODO
     }
     

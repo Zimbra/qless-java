@@ -246,19 +246,24 @@ public class JobIntegrationTest {
         Assert.assertEquals(false, client.jobs(jid).tracked());
     }
 
-//        it 'can add and remove dependencies' do
-//          queue.put('Foo', {}, jid: 'a')
-//          queue.put('Foo', {}, jid: 'b')
-//          queue.put('Foo', {}, jid: 'c', depends: ['a'])
-//          expect(client.jobs['c'].dependencies).to eq(['a'])
-//          client.jobs['c'].depend('b')
-//          expect(client.jobs['c'].dependencies).to eq(%w{a b})
-//          client.jobs['c'].undepend('a')
-//          expect(client.jobs['c'].dependencies).to eq(['b'])
-//        end
     @Test
-    public void canAddAndRemoveDependencies() {
-        Assert.fail("NIY"); // TODO
+    public void canAddAndRemoveDependencies() throws IOException {
+        Queue queue = client.queues("foo");
+        String jidA = queue.put("Foo", null, null);
+        String jidB = queue.put("Foo", null, null);
+        Map<String,Object> opts = new HashMap<>();
+        opts.put("depends", Arrays.asList(jidA));
+        String jidC = queue.put("Foo", null, opts);
+        Assert.assertNotNull(client.jobs(jidC).dependencies());
+        Assert.assertEquals(1, client.jobs(jidC).dependencies().size());
+        Assert.assertEquals(jidA, client.jobs(jidC).dependencies().get(0));
+        client.jobs(jidC).depend(jidB);
+        Assert.assertEquals(2, client.jobs(jidC).dependencies().size());
+        Assert.assertTrue(client.jobs(jidC).dependencies().contains(jidA));
+        Assert.assertTrue(client.jobs(jidC).dependencies().contains(jidB));
+        client.jobs(jidC).undepend(jidA);
+        Assert.assertEquals(1, client.jobs(jidC).dependencies().size());
+        Assert.assertEquals(jidB, client.jobs(jidC).dependencies().get(0));
     }
 
 //        it 'raises an error if retry fails' do
