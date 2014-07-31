@@ -196,18 +196,12 @@ public class JobIntegrationTest {
         Assert.fail("NIY"); // TODO
     }
 
-//        it 'can complete itself' do
-//          queue.put('Foo', {}, jid: 'jid')
-//          queue.pop.complete
-//          expect(client.jobs['jid'].state).to eq('complete')
-//        end
     @Test
     public void canCompleteItself() throws IOException {
-        Assert.fail("NIY"); // TODO
-//        Queue queue = client.queues("foo");
-//        String jid = queue.put("Foo", null, null);
-//        queue.pop().complete();
-//        Assert.assertEquals("complete", client.jobs(jid).state());
+        Queue queue = client.queues("foo");
+        String jid = queue.put("Foo", null, null);
+        queue.pop().complete();
+        Assert.assertEquals("complete", client.jobs(jid).state());
     }
 
 //        it 'can advance itself to another queue' do

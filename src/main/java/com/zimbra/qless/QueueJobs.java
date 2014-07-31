@@ -17,14 +17,11 @@ package com.zimbra.qless;
 import java.io.IOException;
 import java.util.List;
 
-import org.codehaus.jackson.map.ObjectMapper;
-
 
 
 public class QueueJobs {
     protected Client client;
     protected String queueName;
-    protected ObjectMapper objectMapper = new ObjectMapper();
 
     /** Constructor */
     QueueJobs(String queueName, Client client) {

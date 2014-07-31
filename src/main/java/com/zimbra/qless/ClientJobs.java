@@ -16,19 +16,15 @@ package com.zimbra.qless;
 
 import java.io.IOException;
 
-import org.codehaus.jackson.map.DeserializationConfig.Feature;
 import org.codehaus.jackson.map.InjectableValues;
-import org.codehaus.jackson.map.ObjectMapper;
 
 
 public class ClientJobs {
     protected Client client;
-    protected ObjectMapper objectMapper = new ObjectMapper();
 
     /** Constructor */
     ClientJobs(Client client) {
         this.client = client;
-        objectMapper.configure(Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
     
     public Job get(String jid) throws IOException {

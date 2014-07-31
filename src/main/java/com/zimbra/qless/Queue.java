@@ -15,19 +15,20 @@
 package com.zimbra.qless;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.codehaus.jackson.map.InjectableValues;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.type.TypeReference;
+import org.codehaus.jackson.type.JavaType;
 
 
 
 public class Queue {
     protected Client client;
     protected String name;
-    protected ObjectMapper objectMapper = new ObjectMapper();
 
     /** Constructor */
     Queue(String name, Client client) {
@@ -37,8 +38,8 @@ public class Queue {
     
     public Map<String,Object> counts() throws IOException {
         Object result = client.call("queues", name);
-        TypeReference<HashMap<String,Object>> typeRef = new TypeReference<HashMap<String,Object>>(){};
-        return objectMapper.readValue(result.toString(), typeRef);
+        JavaType javaType = new ObjectMapper().getTypeFactory().constructMapType(HashMap.class, String.class, Object.class);
+        return JSON.parse(result.toString(), javaType);
     }
     
     public QueueJobs jobs() {
@@ -55,14 +56,17 @@ public class Queue {
     
     public List<Job> pop(int count) throws IOException {
         Object result = client.call("pop", name, client.workerName(), Integer.toString(count));
-        return null; // TODO
+        InjectableValues injectables = new InjectableValues.Std().addValue("client", client);
+        JavaType javaType = new ObjectMapper().getTypeFactory().constructCollectionType(ArrayList.class, Job.class);
+        List<Job> jobs = JSON.parse(result.toString(), javaType, injectables);
+        return jobs;
     }
     
     public String put(String klass, Object data, Map<String,Object> opts) throws IOException {
         return (String)client.call("put", workerName(), name,
                 OptsHelper.get(opts, "jid", client.generateJid()),
                 klass,
-                data == null ? "{}": objectMapper.writeValueAsString(data),
+                data == null ? "{}": JSON.stringify(data),
                 OptsHelper.get(opts, "delay", "0"),
                 OptsHelper.get(opts, "priority", "0"),
 //                "tags", "{}", // TODO
@@ -98,7 +102,7 @@ public class Queue {
         return (String)client.call("recur", name,
                 OptsHelper.get(opts, "jid", client.generateJid()),
                 klass,
-                objectMapper.writeValueAsString(data),
+                JSON.stringify(data),
                 "interval", "" + interval, OptsHelper.get(opts, "offset", "0"),
                 OptsHelper.get(opts, "priority", "0"),
                 "tags", "[]", // TODO

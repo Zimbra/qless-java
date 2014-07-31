@@ -23,11 +23,9 @@ import java.util.Map;
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonProperty;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.annotate.JacksonInject;
 import org.codehaus.jackson.map.annotate.JsonDeserialize;
 
-import com.google.common.base.Objects.ToStringHelper;
 import com.zimbra.qless.map.JobDataDeserializer;
 import com.zimbra.qless.map.LuaStringArrayDeserializer;
 
@@ -105,9 +103,10 @@ public class Job {
     public void complete(String nextQueue, Map<String,Object> opts) throws IOException {
         // TODO note_state_change :complete
         if (nextQueue == null) {
-            Object retval = client.call("complete", jid, client.workerName(), queueName, new ObjectMapper().writeValueAsString(data));
+            @SuppressWarnings("unused")
+            Object retval = client.call("complete", jid, client.workerName(), queueName, JSON.stringify(data));
         } else {
-            // TODO
+            throw new UnsupportedOperationException("NIY"); // TODO
         }
     }
     

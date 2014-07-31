@@ -16,16 +16,17 @@ package com.zimbra.qless;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.codehaus.jackson.map.InjectableValues;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.JavaType;
 import org.easymock.EasyMock;
 import org.junit.Assert;
 import org.junit.Test;
 
 import com.google.common.io.Resources;
-import com.zimbra.qless.Client;
-import com.zimbra.qless.JSON;
-import com.zimbra.qless.Job;
 
 
 public class JSONTest {
@@ -61,5 +62,17 @@ public class JSONTest {
         Assert.assertEquals(0, job.dependents.size()); 
         Assert.assertEquals(0, job.priority);
         Assert.assertEquals("", job.workerName);
+    }
+    
+    @Test
+    public void testParsePopResponse1() throws IOException {
+        String json = Resources.toString(Resources.getResource(JSONTest.class, "popResponse1.json"), Charset.defaultCharset());
+        InjectableValues injectables = new InjectableValues.Std().addValue("client", EasyMock.createNiceMock(Client.class));
+        JavaType javaType = new ObjectMapper().getTypeFactory().constructCollectionType(ArrayList.class, Job.class);
+        List<Job> jobs = JSON.parse(json, javaType, injectables);
+        Assert.assertNotNull(jobs);
+        Assert.assertEquals(1, jobs.size());
+        Assert.assertEquals("58ee8f40ce4e4e65b66332b915cddaaa", jobs.get(0).jid);
+        Assert.assertEquals(1406831012, jobs.get(0).expiresAt);
     }
 }
