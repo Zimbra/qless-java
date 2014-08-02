@@ -135,8 +135,8 @@ public class Job {
         return data.get(key);
     }
     
-    public Object data(String key, Object value) {
-        return data.put(key, value);
+    public void data(String key, Object value) throws IOException {
+        data.put(key, value);
     }
     
     public void depend(String... jids) throws IOException {

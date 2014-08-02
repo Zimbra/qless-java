@@ -15,6 +15,7 @@
 package com.zimbra.qless;
 
 import java.io.IOException;
+import java.util.Map;
 
 import org.codehaus.jackson.annotate.JsonCreator;
 import org.codehaus.jackson.annotate.JsonProperty;
@@ -32,6 +33,16 @@ public class RecurringJob extends Job {
     @JsonCreator
     RecurringJob(@JacksonInject("client") Client client) {
         super(client);
+    }
+    
+    public void data(Map<String,Object> data) throws IOException {
+        client.call("recur.update", jid, "data", JSON.stringify(data));
+        this.data = data;
+    }
+    
+    public void data(String key, Object value) throws IOException {
+        data.put(key,  value);
+        client.call("recur.update", jid, "data", JSON.stringify(data));
     }
     
     public int interval() {
