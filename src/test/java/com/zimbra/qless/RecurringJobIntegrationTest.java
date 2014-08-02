@@ -161,16 +161,15 @@ public class RecurringJobIntegrationTest {
         Assert.assertEquals(null, client.jobs(jid));
     }
 
-//        it 'can set its tags' do
-//          queue.recur('Foo', {}, 60, jid: 'jid')
-//          client.jobs['jid'].tag('foo')
-//          expect(client.jobs['jid'].tags).to eq(['foo'])
-//          client.jobs['jid'].untag('foo')
-//          expect(client.jobs['jid'].tags).to eq([])
-//        end
     @Test
-    public void canSetItsTags() {
-        Assert.fail("NIY"); // TODO
+    public void canSetItsTags() throws IOException {
+        Queue queue = client.queues("foo");
+        String jid = queue.recur("Foo", null, 60, null);
+        client.jobs(jid).tag("foo");
+        Assert.assertEquals("foo", client.jobs(jid).tags().get(0));
+        client.jobs(jid).untag("foo");
+        Assert.assertEquals(0, client.jobs(jid).tags().size());
+        Assert.assertEquals("[]", JSON.stringify(client.jobs(jid).tags()));
     }
 
 //        describe 'last spawned job access' do

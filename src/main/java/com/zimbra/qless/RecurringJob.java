@@ -15,6 +15,9 @@
 package com.zimbra.qless;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import org.codehaus.jackson.annotate.JsonCreator;
@@ -96,5 +99,23 @@ public class RecurringJob extends Job {
     public void retries(int retries) throws IOException {
         client.call("recur.update", jid, "retries", Integer.toString(retries));
         this.retries = retries;
+    }
+    
+    public void tag(String... tags) throws IOException {
+        List<String> args = new ArrayList<String>();
+        args.add(jid);
+        for (String tag: tags) {
+            args.add(tag);
+        }
+        client.call("recur.tag", args);
+    }
+    
+    public void untag(String... tags) throws IOException {
+        List<String> args = new ArrayList<String>();
+        args.add(jid);
+        for (String tag: tags) {
+            args.add(tag);
+        }
+        client.call("recur.untag", args);
     }
 }
