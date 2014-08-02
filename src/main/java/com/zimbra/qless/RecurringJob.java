@@ -77,6 +77,7 @@ public class RecurringJob extends Job {
     public void move(String queue) throws IOException {
         client.call("recur.update", jid, "queue", queue);
         this.queueName = queue;
+        this.queue = null;
     }
     
     public void priority(int priority) throws IOException {

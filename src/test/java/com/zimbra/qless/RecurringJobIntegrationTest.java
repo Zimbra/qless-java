@@ -126,7 +126,7 @@ public class RecurringJobIntegrationTest {
         Queue queue = client.queues("foo");
         String jid = queue.recur("Foo", null, 60, null);
         RecurringJob job = (RecurringJob)client.jobs(jid);
-        client.jobs(jid).requeue("bar");
+        job.requeue("bar");
         Assert.assertEquals("bar", job.queueName());
         Assert.assertEquals("bar", client.jobs(jid).queueName());
     }
