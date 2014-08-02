@@ -118,24 +118,27 @@ public class RecurringJobIntegrationTest {
         RecurringJob job = (RecurringJob)client.jobs(jid);
         job.klass("Foo");
         Assert.assertEquals("Foo", job.klassName());
+        Assert.assertEquals("Foo", client.jobs(jid).klassName());
     }
 
     @Test
     public void canSetItsQueue() throws IOException {
         Queue queue = client.queues("foo");
         String jid = queue.recur("Foo", null, 60, null);
+        RecurringJob job = (RecurringJob)client.jobs(jid);
         client.jobs(jid).requeue("bar");
+        Assert.assertEquals("bar", job.queueName());
         Assert.assertEquals("bar", client.jobs(jid).queueName());
     }
 
-//        it 'can set its backlog' do
-//          queue.recur('Foo', {}, 60, jid: 'jid', backlog: 10)
-//          client.jobs['jid'].backlog = 1
-//          expect(client.jobs['jid'].backlog).to eq(1)
-//        end
     @Test
-    public void canSetItsBacklog() {
-        Assert.fail("NIY"); // TODO
+    public void canSetItsBacklog() throws IOException {
+        Queue queue = client.queues("foo");
+        String jid = queue.recur("Foo", null, 60, null);
+        RecurringJob job = (RecurringJob)client.jobs(jid);
+        job.backlog(1);
+        Assert.assertEquals(1, job.backlog());
+        Assert.assertEquals(1, ((RecurringJob)client.jobs(jid)).backlog());
     }
 
 //        it 'exposes when the next job will run' do

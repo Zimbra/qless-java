@@ -24,6 +24,9 @@ import org.codehaus.jackson.map.annotate.JacksonInject;
 
 public class RecurringJob extends Job {
     @JsonProperty
+    protected int backlog;
+
+    @JsonProperty
     protected int interval;
 
     @JsonProperty
@@ -33,6 +36,15 @@ public class RecurringJob extends Job {
     @JsonCreator
     RecurringJob(@JacksonInject("client") Client client) {
         super(client);
+    }
+    
+    public int backlog() {
+        return backlog;
+    }
+    
+    public void backlog(int backlog) throws IOException {
+        client.call("recur.update", jid, "backlog", Integer.toString(backlog));
+        this.backlog = backlog;
     }
     
     public void data(Map<String,Object> data) throws IOException {
