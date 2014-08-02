@@ -33,6 +33,7 @@ public class Client {
     protected JedisPool jedisPool;
     protected LuaScript luaScript;
     protected ClientJobs jobs = new ClientJobs(this);
+    protected ClientConfig config = new ClientConfig(this);
 
     public Client(JedisPool jedisPool) {
         this.jedisPool = jedisPool;
@@ -71,6 +72,10 @@ public class Client {
         } finally {
             jedisPool.returnResource(jedis);
         }
+    }
+    
+    public ClientConfig config() {
+        return config;
     }
     
     String generateJid() {
