@@ -47,6 +47,10 @@ public class RecurringJob extends Job {
         this.backlog = backlog;
     }
     
+    public void cancel() throws IOException {
+        client.call("unrecur", jid);
+    }
+    
     public void data(Map<String,Object> data) throws IOException {
         client.call("recur.update", jid, "data", JSON.stringify(data));
         this.data = data;

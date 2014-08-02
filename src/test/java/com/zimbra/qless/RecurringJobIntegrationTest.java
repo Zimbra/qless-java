@@ -153,14 +153,12 @@ public class RecurringJobIntegrationTest {
         Assert.fail("NIY"); // TODO
     }
 
-//        it 'can cancel itself' do
-//          queue.recur('Foo', {}, 60, jid: 'jid')
-//          client.jobs['jid'].cancel
-//          expect(client.jobs['jid']).to_not be
-//        end
     @Test
-    public void canCancelItself() {
-        Assert.fail("NIY"); // TODO
+    public void canCancelItself() throws IOException {
+        Queue queue = client.queues("foo");
+        String jid = queue.recur("Foo", null, 60, null);
+        client.jobs(jid).cancel();
+        Assert.assertEquals(null, client.jobs(jid));
     }
 
 //        it 'can set its tags' do
