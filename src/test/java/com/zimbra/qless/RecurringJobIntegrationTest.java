@@ -112,14 +112,13 @@ public class RecurringJobIntegrationTest {
         Assert.fail("NIY"); // TODO
     }
 
-//        it 'can set its klass' do
-//          queue.recur('Foo', {}, 60, jid: 'jid')
-//          client.jobs['jid'].klass = Job
-//          expect(client.jobs['jid'].klass).to eq(Job)
-//        end
     @Test
-    public void canSetItsKlass() {
-        Assert.fail("NIY"); // TODO
+    public void canSetItsKlass() throws IOException {
+        Queue queue = client.queues("foo");
+        String jid = queue.recur("Foo", null, 60, null);
+        RecurringJob job = (RecurringJob)client.jobs(jid);
+        job.klass("Foo");
+        Assert.assertEquals("Foo", job.klassName());
     }
 
     @Test
