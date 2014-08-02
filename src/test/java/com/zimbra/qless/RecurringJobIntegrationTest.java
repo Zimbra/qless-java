@@ -94,14 +94,13 @@ public class RecurringJobIntegrationTest {
         Assert.fail("NIY"); // TODO
     }
 
-//        it 'can set its interval' do
-//          queue.recur('Foo', {}, 60, jid: 'jid')
-//          client.jobs['jid'].interval = 10
-//          expect(client.jobs['jid'].interval).to eq(10)
-//        end
     @Test
-    public void canSetItsInterval() {
-        Assert.fail("NIY"); // TODO
+    public void canSetItsInterval() throws IOException {
+        Queue queue = client.queues("foo");
+        String jid = queue.recur("Foo", null, 60, null);
+        RecurringJob job = (RecurringJob)client.jobs(jid);
+        job.interval(10);
+        Assert.assertEquals(10, job.interval());
     }
 
 //        it 'can set its data' do

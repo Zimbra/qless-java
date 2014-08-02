@@ -17,14 +17,26 @@ package com.zimbra.qless;
 import java.io.IOException;
 
 import org.codehaus.jackson.annotate.JsonCreator;
+import org.codehaus.jackson.annotate.JsonProperty;
 import org.codehaus.jackson.map.annotate.JacksonInject;
 
 
 public class RecurringJob extends Job {
+    @JsonProperty
+    protected int interval;
 
+    
     @JsonCreator
     RecurringJob(@JacksonInject("client") Client client) {
         super(client);
+    }
+    
+    public int interval() {
+        return interval;
+    }
+    
+    public void interval(int interval) {
+        this.interval = interval;
     }
     
     public void priority(int priority) throws IOException {
