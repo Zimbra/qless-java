@@ -274,6 +274,10 @@ public class Job {
             .toString();
     }
     
+    public int ttl() {
+        return expiresAt - (int)(System.currentTimeMillis() / 1000);
+    }
+    
     public void undepend(String... jids) throws IOException {
         List<String> args = new ArrayList<>();
         args.addAll(Arrays.asList(jid, "off"));

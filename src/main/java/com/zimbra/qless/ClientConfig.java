@@ -39,12 +39,12 @@ public class ClientConfig {
         return (Map<String,Object>)JSON.parse(result.toString(), javaType);
     }
     
-    public String get(String key) throws IOException {
-        return (String)client.call("config.get", key);
+    public Object get(String key) throws IOException {
+        return client.call("config.get", key);
     }
     
-    public void put(String key, String value) throws IOException {
-        client.call("config.set", key, value);
+    public void put(String key, Object value) throws IOException {
+        client.call("config.set", key, value.toString());
     }
     
     public void clear(String key) throws IOException {

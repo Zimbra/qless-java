@@ -111,15 +111,14 @@ public class JobIntegrationTest {
         Assert.fail("NIY"); // TODO
     }
 
-//        it 'exposes its ttl' do
-//          client.config['heartbeat'] = 10
-//          queue.put(Job, {}, jid: 'jid')
-//          job = queue.pop
-//          expect(9...10).to include(job.ttl)
-//        end
     @Test
-    public void exposesItsTtl() {
-        Assert.fail("NIY"); // TODO
+    public void exposesItsTtl() throws IOException {
+        client.config().put("heartbeat", 10);
+        Queue queue = client.queues("foo");
+        queue.put("Foo", null, null);
+        Job job = queue.pop();
+        int ttl = job.ttl();
+        Assert.assertTrue(ttl >= 9 && ttl <= 10);
     }
 
     @Test
