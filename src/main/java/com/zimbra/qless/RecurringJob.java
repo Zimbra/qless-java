@@ -25,6 +25,9 @@ public class RecurringJob extends Job {
     @JsonProperty
     protected int interval;
 
+    @JsonProperty
+    protected int retries;
+
     
     @JsonCreator
     RecurringJob(@JacksonInject("client") Client client) {
@@ -42,5 +45,14 @@ public class RecurringJob extends Job {
     public void priority(int priority) throws IOException {
         client.call("recur.update", jid, "priority", Integer.toString(priority));
         this.priority = priority;
+    }
+    
+    public int retries() {
+        return retries;
+    }
+    
+    public void retries(int retries) throws IOException {
+        client.call("recur.update", jid, "retries", Integer.toString(retries));
+        this.retries = retries;
     }
 }

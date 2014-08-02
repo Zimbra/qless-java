@@ -84,14 +84,13 @@ public class RecurringJobIntegrationTest {
         Assert.assertEquals(10, client.jobs(jid).priority());
     }
 
-//        it 'can set its retries' do
-//          queue.recur('Foo', {}, 60, jid: 'jid', retries: 2)
-//          client.jobs['jid'].retries = 5
-//          expect(client.jobs['jid'].retries).to eq(5)
-//        end
     @Test
-    public void canSetItsRetries() {
-        Assert.fail("NIY"); // TODO
+    public void canSetItsRetries() throws IOException {
+        Queue queue = client.queues("foo");
+        String jid = queue.recur("Foo", null, 60, null);
+        RecurringJob job = (RecurringJob)client.jobs(jid);
+        job.retries(5);
+        Assert.assertEquals(5, job.retries());
     }
 
     @Test
