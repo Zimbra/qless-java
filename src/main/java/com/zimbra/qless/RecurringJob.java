@@ -16,7 +16,6 @@ package com.zimbra.qless;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -28,6 +27,9 @@ import org.codehaus.jackson.map.annotate.JacksonInject;
 public class RecurringJob extends Job {
     @JsonProperty
     protected int backlog;
+
+    @JsonProperty
+    protected int count;
 
     @JsonProperty
     protected int interval;
@@ -77,10 +79,28 @@ public class RecurringJob extends Job {
         this.klassName = klass;
     }
     
+    public String lastSpawnedJid() {
+        if (neverSpawned()) {
+            return null;
+        }
+        return jid + "-" + count;
+    }
+    
+    public Job lastSpawnedJob() throws IOException {
+        if (neverSpawned()) {
+            return null;
+        }
+        return client.jobs(lastSpawnedJid());
+    }
+    
     public void move(String queue) throws IOException {
         client.call("recur.update", jid, "queue", queue);
         this.queueName = queue;
         this.queue = null;
+    }
+    
+    public boolean neverSpawned() {
+        return count == 0;
     }
     
     public void priority(int priority) throws IOException {

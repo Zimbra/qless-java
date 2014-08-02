@@ -175,11 +175,6 @@ public class RecurringJobIntegrationTest {
 //        describe 'last spawned job access' do
 //          it 'exposes the jid and job of the last spawned job' do
 //            queue.recur('Foo', {}, 60, jid: 'jid')
-    @Test
-    public void exposesJidAndJobOfLastSpawnedJob() {
-        Assert.fail("NIY"); // TODO
-    }
-
 //            Timecop.travel(Time.now + 121) do # give it enough time to spawn 2 jobs
 //              last_spawned = queue.peek(2).max_by(&:initially_put_at)
 //
@@ -188,16 +183,16 @@ public class RecurringJobIntegrationTest {
 //              expect(job.last_spawned_job).to eq(last_spawned)
 //            end
 //          end
-//
-//          it 'returns nil if no job has ever been spawned' do
-//            queue.recur('Foo', {}, 60, jid: 'jid')
-//            job = client.jobs['jid']
-//
-//            expect(job.last_spawned_jid).to be_nil
-//            expect(job.last_spawned_job).to be_nil
-//          end
     @Test
-    public void lastSpawnedJobReturnsNilIfNoJobHasEverBeenSpawned() {
+    public void exposesJidAndJobOfLastSpawnedJob() {
         Assert.fail("NIY"); // TODO
+    }
+
+    @Test
+    public void lastSpawnedJobReturnsNullIfNoJobHasEverBeenSpawned() throws IOException {
+        Queue queue = client.queues("foo");
+        String jid = queue.recur("Foo", null, 60, null);
+        Assert.assertEquals(null, ((RecurringJob)client.jobs(jid)).lastSpawnedJid());
+        Assert.assertEquals(null, ((RecurringJob)client.jobs(jid)).lastSpawnedJob());
     }
 }
