@@ -86,7 +86,7 @@ public class Queue {
         return (String)client.call("recur", name,
                 OptsHelper.get(opts, "jid", client.generateJid()),
                 klass,
-                JSON.stringify(data),
+                data == null ? "{}" : JSON.stringify(data),
                 "interval", Integer.toString(interval), OptsHelper.get(opts, "offset", "0"),
                 "priority", OptsHelper.get(opts, "priority", "0"),
                 "tags", JSON.stringify(OptsHelper.getList(opts, "tags")),

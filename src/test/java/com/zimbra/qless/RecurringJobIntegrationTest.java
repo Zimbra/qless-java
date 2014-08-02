@@ -76,14 +76,12 @@ public class RecurringJobIntegrationTest {
         Assert.fail("NIY"); // TODO
     }
 
-//        it 'can set its priority' do
-//          queue.recur('Foo', {}, 60, jid: 'jid', priority: 0)
-//          client.jobs['jid'].priority = 10
-//          expect(client.jobs['jid'].priority).to eq(10)
-//        end
     @Test
-    public void canSetItsPriority() {
-        Assert.fail("NIY"); // TODO
+    public void canSetItsPriority() throws IOException {
+        Queue queue = client.queues("foo");
+        String jid = queue.recur("Foo", null, 60, null);
+        client.jobs(jid).priority(10);
+        Assert.assertEquals(10, client.jobs(jid).priority());
     }
 
 //        it 'can set its retries' do

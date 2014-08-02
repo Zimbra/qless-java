@@ -14,10 +14,21 @@
 
 package com.zimbra.qless;
 
+import java.io.IOException;
+
+import org.codehaus.jackson.annotate.JsonCreator;
+import org.codehaus.jackson.map.annotate.JacksonInject;
+
 
 public class RecurringJob extends Job {
 
-    RecurringJob(Client client) {
+    @JsonCreator
+    RecurringJob(@JacksonInject("client") Client client) {
         super(client);
+    }
+    
+    public void priority(int priority) throws IOException {
+        client.call("recur.update", jid, "priority", Integer.toString(priority));
+        this.priority = priority;
     }
 }

@@ -54,7 +54,7 @@ public class JobIntegrationTest {
     
     @Test
     @SuppressWarnings("rawtypes")
-    public void hasExpectedAttributes() throws IOException {
+    public void hasExpectedProperties() throws IOException {
         Queue queue = client.queues("foo");
         Map<String, Object> data = new HashMap<>();
         data.put("whiz",  "bang");
