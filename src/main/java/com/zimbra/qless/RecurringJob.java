@@ -42,9 +42,17 @@ public class RecurringJob extends Job {
         this.interval = interval;
     }
     
+    public void move(String queue) throws IOException {
+        client.call("recur.update", jid, "queue", queue);
+    }
+    
     public void priority(int priority) throws IOException {
         client.call("recur.update", jid, "priority", Integer.toString(priority));
         this.priority = priority;
+    }
+    
+    public void requeue(String queue) throws IOException {
+        move(queue);
     }
     
     public int retries() {
