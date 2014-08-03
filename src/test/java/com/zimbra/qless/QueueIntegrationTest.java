@@ -119,14 +119,11 @@ public class QueueIntegrationTest {
         Assert.fail("NIY"); // TODO
     }
 
-//      it 'exposes the length of the queue' do
-//        expect(queue.length).to eq(0)
-//        queue.put('Foo', {})
-//        expect(queue.length).to eq(1)
-//      end
     @Test
     public void exposesQueueLength() throws IOException {
-        Assert.fail("NIY"); // TODO
+        Assert.assertEquals(0,  queue.length());
+        queue.put("Foo", null, null);
+        Assert.assertEquals(1,  queue.length());
     }
 
 //      it 'can pause and unpause itself' do

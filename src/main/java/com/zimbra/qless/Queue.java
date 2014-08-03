@@ -24,6 +24,9 @@ import org.codehaus.jackson.map.InjectableValues;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.JavaType;
 
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.Transaction;
+
 
 
 public class Queue {
@@ -44,6 +47,24 @@ public class Queue {
     
     public QueueJobs jobs() {
         return new QueueJobs(name, client);
+    }
+    
+    public int length() {
+        Jedis jedis = client.jedisPool.getResource();
+        try {
+            Transaction transaction = jedis.multi();
+            transaction.zcard("ql:q:" + name + "-locks");
+            transaction.zcard("ql:q:" + name + "-work");
+            transaction.zcard("ql:q:" + name + "-scheduled");
+            List<Object> result = transaction.exec();
+            int length = 0;
+            for (Object obj: result) {
+                length += (Long)obj;
+            }
+            return length;
+        } finally {
+            client.jedisPool.returnResource(jedis);
+        }
     }
     
     public String name() {
