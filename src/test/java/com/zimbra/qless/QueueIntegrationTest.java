@@ -93,13 +93,10 @@ public class QueueIntegrationTest {
         Assert.fail("NIY"); // TODO
     }
 
-//      it 'exposes queue peeking' do
-//        queue.put('Foo', {}, jid: 'jid')
-//        expect(queue.peek.jid).to eq('jid')
-//      end
     @Test
     public void exposesQueuePeeking() throws IOException {
-        Assert.fail("NIY"); // TODO
+        String jid = queue.put("Foo", null, null);
+        Assert.assertEquals(jid, queue.peek().jid());
     }
 
 //      it 'provides an array of jobs when using multi-peek' do
@@ -121,9 +118,9 @@ public class QueueIntegrationTest {
 
     @Test
     public void exposesQueueLength() throws IOException {
-        Assert.assertEquals(0,  queue.length());
+        Assert.assertEquals(0, queue.length());
         queue.put("Foo", null, null);
-        Assert.assertEquals(1,  queue.length());
+        Assert.assertEquals(1, queue.length());
     }
 
 //      it 'can pause and unpause itself' do
