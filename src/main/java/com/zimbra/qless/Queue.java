@@ -50,12 +50,32 @@ public class Queue {
         return name;
     }
     
+    public Job peek() throws IOException {
+        List<Job> jobs = peek(1);
+        return jobs != null && jobs.size() > 0 ? jobs.get(0) : null;
+    }
+    
+    public List<Job> peek(int count) throws IOException {
+        Object result = client.call("peek", name, Integer.toString(count));
+        if ("{}".equals(result)) {
+            return new ArrayList<Job>();
+        }
+        InjectableValues injectables = new InjectableValues.Std().addValue("client", client);
+        JavaType javaType = new ObjectMapper().getTypeFactory().constructCollectionType(ArrayList.class, Job.class);
+        List<Job> jobs = JSON.parse(result.toString(), javaType, injectables);
+        return jobs;
+    }
+    
     public Job pop() throws IOException {
-        return pop(1).get(0);
+        List<Job> jobs = pop(1);
+        return jobs != null && jobs.size() > 0 ? jobs.get(0) : null;
     }
     
     public List<Job> pop(int count) throws IOException {
         Object result = client.call("pop", name, client.workerName(), Integer.toString(count));
+        if ("{}".equals(result)) {
+            return new ArrayList<Job>();
+        }
         InjectableValues injectables = new InjectableValues.Std().addValue("client", client);
         JavaType javaType = new ObjectMapper().getTypeFactory().constructCollectionType(ArrayList.class, Job.class);
         List<Job> jobs = JSON.parse(result.toString(), javaType, injectables);
