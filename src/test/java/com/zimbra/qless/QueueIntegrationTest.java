@@ -99,13 +99,11 @@ public class QueueIntegrationTest {
         Assert.assertEquals(jid, queue.peek().jid());
     }
 
-//      it 'provides an array of jobs when using multi-peek' do
-//        2.times { queue.put('Foo', {}) }
-//        expect(queue.peek(10).length).to eq(2)
-//      end
     @Test
     public void providesAnArrayOfJobsWhenUsingMultiPeek() throws IOException {
-        Assert.fail("NIY"); // TODO
+        queue.put("Foo", null, null);
+        queue.put("Foo", null, null);
+        Assert.assertEquals(2, queue.peek(10).size());
     }
 
 //      it 'exposes queue statistics' do
