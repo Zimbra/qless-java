@@ -68,9 +68,9 @@ public class Queue {
                 klass,
                 data == null ? "{}": JSON.stringify(data),
                 OptsHelper.get(opts, "delay", "0"),
-                OptsHelper.get(opts, "priority", "0"),
+                "priority", OptsHelper.get(opts, "priority", "0"),
                 "tags", JSON.stringify(OptsHelper.getList(opts, "tags")),
-                OptsHelper.get(opts, "retries", "5"),
+                "retries", OptsHelper.get(opts, "retries", "5"),
                 "depends", JSON.stringify(OptsHelper.getList(opts, "depends")));
     }
     

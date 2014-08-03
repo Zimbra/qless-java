@@ -63,7 +63,7 @@ public class JobIntegrationTest {
         opts.put("jid", "jid");
         opts.put("tags", Arrays.asList("foo"));
         opts.put("retries", "3");
-         String jid = queue.put("Foo", data, opts);
+        String jid = queue.put("Foo", data, opts);
         Job job = client.jobs(jid);
         Assert.assertEquals("jid", job.jid());
         Assert.assertNotNull(job.data());
