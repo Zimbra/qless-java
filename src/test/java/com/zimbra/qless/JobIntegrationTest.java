@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.exceptions.JedisDataException;
 
 
 public class JobIntegrationTest {
@@ -175,20 +176,17 @@ public class JobIntegrationTest {
         Assert.assertEquals("bar", client.jobs(jid).queueName());
     }
 
-//        it 'fails when requeing a cancelled job' do
-//          queue.put('Foo', {}, jid: 'the-jid')
-//          job = client.jobs['the-jid']
-//          client.jobs['the-jid'].cancel # cancel a different instance that represents the same job
-//
-//          expect {
-//            job.requeue('bar')
-//          }.to raise_error(/job the-jid does not exist/i)
-//
-//          expect(client.jobs['jid']).to be_nil
-//        end
     @Test
-    public void failsWhenRequeingACancelledJob() {
-        Assert.fail("NIY"); // TODO
+    public void failsWhenRequeingACancelledJob() throws IOException {
+        Queue queue = client.queues("foo");
+        String jid = queue.put("Foo", null, null);
+        Job job = client.jobs(jid); 
+        client.jobs(jid).cancel(); // Cancel a different instance that represents the same job
+        try {
+            job.requeue("bar");
+            Assert.fail("Expected exception");
+        } catch (JedisDataException e) {}
+        Assert.assertEquals(null, client.jobs(jid));
     }
 
     @Test
