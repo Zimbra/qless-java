@@ -84,13 +84,11 @@ public class QueueIntegrationTest {
         Assert.fail("NIY"); // TODO
     }
 
-//      it 'provides an array of jobs when using multi-pop' do
-//        2.times { queue.put('Foo', {}) }
-//        expect(queue.pop(10).length).to eq(2)
-//      end
     @Test
     public void providesListOfJobsWhenUsingMultiPop() throws IOException {
-        Assert.fail("NIY"); // TODO
+        queue.put("Foo", null, null);
+        queue.put("Foo", null, null);
+        Assert.assertEquals(2, queue.peek(10).size());
     }
 
     @Test
