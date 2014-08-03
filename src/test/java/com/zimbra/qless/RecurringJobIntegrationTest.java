@@ -15,6 +15,9 @@
 package com.zimbra.qless;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import junit.framework.Assert;
 
@@ -51,29 +54,29 @@ public class RecurringJobIntegrationTest {
         Assert.fail("NIY"); // TODO
     }
 
-//        it 'has all the expected attributes' do
-//          queue.recur('Foo', { whiz: 'bang' }, 60, jid: 'jid', tags: ['foo'],
-//                      retries: 3)
-//          job = client.jobs['jid']
-//          expected = {
-//            :jid        => 'jid',
-//            :data       => {'whiz' => 'bang'},
-//            :tags       => ['foo'],
-//            :count      => 0,
-//            :backlog    => 0,
-//            :retries    => 3,
-//            :interval   => 60,
-//            :priority   => 0,
-//            :queue_name => 'foo',
-//            :klass_name => 'Foo'
-//          }
-//          expected.each do |key, value|
-//            expect(job.send(key)).to eq(value)
-//          end
-//        end
     @Test
-    public void hasAllTheExpectedAttributes() {
-        Assert.fail("NIY"); // TODO
+    public void hasExpectedProperties() throws IOException {
+        Queue queue = client.queues("foo");
+        Map<String, Object> data = new HashMap<>();
+        data.put("whiz",  "bang");
+        Map<String, Object> opts = new HashMap<>();
+        opts.put("jid", "jid");
+        opts.put("tags", Arrays.asList("foo"));
+        opts.put("retries", "3");
+        String jid = queue.recur("Foo", data, 60, opts);
+        RecurringJob job = (RecurringJob)client.jobs(jid);
+        Assert.assertEquals("jid", job.jid());
+        Assert.assertNotNull(job.data());
+        Assert.assertTrue(job.data() instanceof Map);
+        Assert.assertEquals("bang", ((Map<String,Object>)job.data()).get("whiz"));
+        Assert.assertEquals("[\"foo\"]", JSON.stringify(job.tags()));
+        Assert.assertEquals(0, job.count());
+        Assert.assertEquals(0, job.backlog());
+        Assert.assertEquals(3, job.retries());
+        Assert.assertEquals(60, job.interval());
+        Assert.assertEquals(0, job.priority());
+        Assert.assertEquals("foo", job.queueName());
+        Assert.assertEquals("Foo", job.klassName());
     }
 
     @Test

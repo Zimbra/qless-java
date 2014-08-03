@@ -56,6 +56,10 @@ public class RecurringJob extends Job {
         client.call("unrecur", jid);
     }
     
+    public int count() {
+        return count;
+    }
+    
     public void data(Map<String,Object> data) throws IOException {
         client.call("recur.update", jid, "data", JSON.stringify(data));
         this.data = data;
