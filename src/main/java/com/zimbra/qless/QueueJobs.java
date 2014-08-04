@@ -29,6 +29,10 @@ public class QueueJobs {
         this.client = client;
     }
     
+    public List<String> jobs(String state) throws IOException {
+        return jobs(state, 0, 0);
+    }
+    
     @SuppressWarnings("unchecked")
     public List<String> jobs(String state, int start, int count) throws IOException {
         Object result = client.call("jobs", state, queueName, "" + start, "" + count);

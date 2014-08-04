@@ -15,6 +15,7 @@
 package com.zimbra.qless;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Map;
 
 import junit.framework.Assert;
@@ -46,20 +47,13 @@ public class QueueIntegrationTest {
         queue = client.queues("foo");
     }
     
-//    it 'provides access to jobs in different states' do
-//        queue.put('Foo', {})
-//        [:depends, :running, :stalled, :scheduled, :recurring].each do |cmd|
-//          expect(queue.jobs.send(cmd)).to eq([])
-//        end
-//      end
     @Test
     public void providesAccessToJobsInDifferentStates() throws IOException {
         queue.put("Foo", null, null);
         final String[] STATES = {"depends", "running", "stalled", "scheduled", "recurring"};
         for (String state: STATES) {
-//            Assert.assertEquals(0, queue.jobs()
+            Assert.assertEquals(Collections.EMPTY_LIST, queue.jobs().jobs(state));
         }
-        Assert.fail("NIY"); // TODO
     }
     
     @Test
