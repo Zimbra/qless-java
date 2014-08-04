@@ -115,16 +115,13 @@ public class QueueIntegrationTest {
         Assert.assertEquals(1, queue.length());
     }
 
-//      it 'can pause and unpause itself' do
-//        expect(queue.paused?).to be(false)
-//        queue.pause
-//        expect(queue.paused?).to be(true)
-//        queue.unpause
-//        expect(queue.paused?).to be(false)
-//      end
     @Test
     public void canPauseAndUnpauseItself() throws IOException {
-        Assert.fail("NIY"); // TODO
+        Assert.assertEquals(false, queue.paused());
+        queue.pause();
+        Assert.assertEquals(true, queue.paused());
+        queue.unpause();
+        Assert.assertEquals(false, queue.paused());
     }
 
 //      it 'can optionally stop all running jobs when pausing' do

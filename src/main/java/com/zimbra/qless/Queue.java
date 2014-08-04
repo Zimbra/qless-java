@@ -87,6 +87,15 @@ public class Queue {
         return name;
     }
     
+    public void pause() throws IOException {
+        client.call("pause", name);
+        client.call("timeout", jobs().running(0, -1));
+    }
+    
+    public boolean paused() throws IOException {
+        return (Boolean)counts().get("paused");
+    }
+    
     public Job peek() throws IOException {
         List<Job> jobs = peek(1);
         return jobs != null && jobs.size() > 0 ? jobs.get(0) : null;
@@ -155,6 +164,10 @@ public class Queue {
         Object result = client.call("stats", name, client.now());
         JavaType javaType = new ObjectMapper().getTypeFactory().constructMapType(HashMap.class, String.class, Object.class);
         return JSON.parse(result.toString(), javaType);
+    }
+    
+    public void unpause() throws IOException {
+        client.call("unpause", name);
     }
     
     String workerName() {
