@@ -67,6 +67,14 @@ public class Queue {
         }
     }
     
+    public int maxConcurrency() throws IOException {
+        return Integer.parseInt(client.config.get("max-concurrency").toString());
+    }
+    
+    public void maxConcurrency(int maxConcurrency) throws IOException {
+        client.config.put("max-concurrency", maxConcurrency);
+    }
+    
     public String name() {
         return name;
     }

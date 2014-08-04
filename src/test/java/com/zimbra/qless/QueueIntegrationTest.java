@@ -141,13 +141,10 @@ public class QueueIntegrationTest {
         Assert.fail("NIY"); // TODO
     }
 
-//      it 'exposes max concurrency' do
-//        queue.max_concurrency = 5
-//        expect(queue.max_concurrency).to eq(5)
-//      end
     @Test
     public void exposesMaxConcurrency() throws IOException {
-        Assert.fail("NIY"); // TODO
+        queue.maxConcurrency(5);
+        Assert.assertEquals(5, queue.maxConcurrency());
     }
 
     @Test
