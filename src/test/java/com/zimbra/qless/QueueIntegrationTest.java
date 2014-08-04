@@ -76,14 +76,11 @@ public class QueueIntegrationTest {
         Assert.assertEquals(1    , counts.get("waiting"));
     }
 
-//      it 'provides access to the heartbeat configuration' do
-//        original = queue.heartbeat
-//        queue.heartbeat = 10
-//        expect(queue.heartbeat).to_not eq(original)
-//      end
     @Test
     public void providesAccessToHeartbeatConfiguration() throws IOException {
-        Assert.fail("NIY"); // TODO
+        int original = queue.heartbeat();
+        queue.heartbeat(10);
+        Assert.assertTrue(queue.heartbeat() != original);
     }
 
     @Test

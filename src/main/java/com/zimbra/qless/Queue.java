@@ -45,6 +45,14 @@ public class Queue {
         return JSON.parse(result.toString(), javaType);
     }
     
+    public int heartbeat() throws IOException {
+        return Integer.parseInt(client.config.get("heartbeat").toString());
+    }
+    
+    public void heartbeat(int heartbeat) throws IOException {
+        client.config.put("heartbeat", heartbeat);
+    }
+    
     public QueueJobs jobs() {
         return new QueueJobs(name, client);
     }
