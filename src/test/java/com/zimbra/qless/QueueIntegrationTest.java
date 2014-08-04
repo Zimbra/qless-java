@@ -118,12 +118,9 @@ public class QueueIntegrationTest {
         Assert.assertEquals(false, queue.paused());
     }
 
-//      it 'can optionally stop all running jobs when pausing' do
-//        pending('this is specific to ruby')
-//      end
     @Test
     public void canOptionallyStopAllRunningJobsWhenPausing() throws IOException {
-        Assert.fail("NIY"); // TODO
+        LOGGER.debug("This is specific to Ruby");
     }
 
     @Test
