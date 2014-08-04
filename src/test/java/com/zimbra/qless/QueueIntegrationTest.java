@@ -106,12 +106,9 @@ public class QueueIntegrationTest {
         Assert.assertEquals(2, queue.peek(10).size());
     }
 
-//      it 'exposes queue statistics' do
-//        expect(queue.stats).to be
-//      end
     @Test
     public void exposesQueueStatistics() throws IOException {
-        Assert.fail("NIY"); // TODO
+        Assert.assertTrue(queue.stats() != null);
     }
 
     @Test

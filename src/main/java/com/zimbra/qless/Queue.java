@@ -143,6 +143,12 @@ public class Queue {
                 "backlog", OptsHelper.get(opts, "backlog", "0"));
     }
     
+    public Map<String,Object> stats() throws IOException {
+        Object result = client.call("stats", name, client.now());
+        JavaType javaType = new ObjectMapper().getTypeFactory().constructMapType(HashMap.class, String.class, Object.class);
+        return JSON.parse(result.toString(), javaType);
+    }
+    
     String workerName() {
         return client.workerName();
     }
