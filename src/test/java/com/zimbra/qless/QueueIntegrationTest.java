@@ -15,6 +15,7 @@
 package com.zimbra.qless;
 
 import java.io.IOException;
+import java.util.Map;
 
 import junit.framework.Assert;
 
@@ -53,25 +54,26 @@ public class QueueIntegrationTest {
 //      end
     @Test
     public void providesAccessToJobsInDifferentStates() throws IOException {
+        queue.put("Foo", null, null);
+        final String[] STATES = {"depends", "running", "stalled", "scheduled", "recurring"};
+        for (String state: STATES) {
+//            Assert.assertEquals(0, queue.jobs()
+        }
         Assert.fail("NIY"); // TODO
     }
     
-//      it 'provides access to job counts' do
-//        queue.put('Foo', {})
-//        expect(queue.counts).to eq({
-//          'depends'   => 0,
-//          'name'      => 'foo',
-//          'paused'    => false,
-//          'recurring' => 0,
-//          'scheduled' => 0,
-//          'running'   => 0,
-//          'stalled'   => 0,
-//          'waiting'   => 1
-//        })
-//      end
     @Test
     public void providesAccessToJobCounts() throws IOException {
-        Assert.fail("NIY"); // TODO
+        queue.put("Foo", null, null);
+        Map<String,Object> counts = queue.counts();
+        Assert.assertEquals(0    , counts.get("depends"));
+        Assert.assertEquals("foo", counts.get("name"));
+        Assert.assertEquals(false, counts.get("paused"));
+        Assert.assertEquals(0    , counts.get("recurring"));
+        Assert.assertEquals(0    , counts.get("scheduled"));
+        Assert.assertEquals(0    , counts.get("running"));
+        Assert.assertEquals(0    , counts.get("stalled"));
+        Assert.assertEquals(1    , counts.get("waiting"));
     }
 
 //      it 'provides access to the heartbeat configuration' do
