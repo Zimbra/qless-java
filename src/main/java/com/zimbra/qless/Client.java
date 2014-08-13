@@ -34,10 +34,12 @@ public class Client {
     protected LuaScript luaScript;
     protected ClientJobs jobs = new ClientJobs(this);
     protected ClientConfig config = new ClientConfig(this);
+    protected ClientEvents events;
 
     public Client(JedisPool jedisPool) {
         this.jedisPool = jedisPool;
         this.luaScript = new LuaScript(jedisPool);
+        events = new ClientEvents(this, jedisPool);
     }
     
     Object call(String command, String... args) throws IOException {
@@ -76,6 +78,10 @@ public class Client {
     
     public ClientConfig config() {
         return config;
+    }
+    
+    public ClientEvents events() {
+        return events;
     }
     
     String generateJid() {
