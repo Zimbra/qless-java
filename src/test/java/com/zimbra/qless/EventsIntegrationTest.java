@@ -44,7 +44,7 @@ public class EventsIntegrationTest {
         client = new Client(jedisPool);
         jedis.flushDB();
         
-        queue = client.queues("foo");
+        queue = client.queue("foo");
         untracked = client.jobs(queue.put("Foo", null, null));
         tracked = client.jobs(queue.put("Bar", null, null));
         tracked.track();
