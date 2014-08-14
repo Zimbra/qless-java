@@ -63,7 +63,7 @@ public class QueueTest {
     @Test
     public void specifyAJidInPutAndRecur() throws IOException {
         String s = "Failed specifying a jid in put or recur";
-        Queue queue = client.queues("foo");
+        Queue queue = client.queue("foo");
         
         HashMap<String,Object> data = new HashMap<>();
         data.put("foo", "bar");

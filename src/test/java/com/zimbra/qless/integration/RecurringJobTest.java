@@ -12,7 +12,7 @@
  * ***** END LICENSE BLOCK *****
  */
 
-package com.zimbra.qless;
+package com.zimbra.qless.integration;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -26,20 +26,27 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.zimbra.qless.Client;
+import com.zimbra.qless.JSON;
+import com.zimbra.qless.Queue;
+import com.zimbra.qless.RecurringJob;
+
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
 
-public class RecurringJobIntegrationTest {
-    final Logger LOGGER = LoggerFactory.getLogger(RecurringJobIntegrationTest.class);
+public class RecurringJobTest {
+    final Logger LOGGER = LoggerFactory.getLogger(RecurringJobTest.class);
     JedisPool jedisPool = new JedisPool("localhost");
     Client client;
+    Queue queue;
     
     @Before
     public void before() throws IOException {
         Jedis jedis = jedisPool.getResource();
         client = new Client(jedisPool);
         jedis.flushDB();
+        queue = client.queue("foo");
     }
     
 //      describe RecurringJob, :integration do
@@ -56,7 +63,6 @@ public class RecurringJobIntegrationTest {
 
     @Test
     public void hasExpectedProperties() throws IOException {
-        Queue queue = client.queues("foo");
         Map<String, Object> data = new HashMap<>();
         data.put("whiz",  "bang");
         Map<String, Object> opts = new HashMap<>();
@@ -81,7 +87,6 @@ public class RecurringJobIntegrationTest {
 
     @Test
     public void canSetItsPriority() throws IOException {
-        Queue queue = client.queues("foo");
         String jid = queue.recur("Foo", null, 60, null);
         client.jobs(jid).priority(10);
         Assert.assertEquals(10, client.jobs(jid).priority());
@@ -89,7 +94,6 @@ public class RecurringJobIntegrationTest {
 
     @Test
     public void canSetItsRetries() throws IOException {
-        Queue queue = client.queues("foo");
         String jid = queue.recur("Foo", null, 60, null);
         RecurringJob job = (RecurringJob)client.jobs(jid);
         job.retries(5);
@@ -98,7 +102,6 @@ public class RecurringJobIntegrationTest {
 
     @Test
     public void canSetItsInterval() throws IOException {
-        Queue queue = client.queues("foo");
         String jid = queue.recur("Foo", null, 60, null);
         RecurringJob job = (RecurringJob)client.jobs(jid);
         job.interval(10);
@@ -107,7 +110,6 @@ public class RecurringJobIntegrationTest {
 
     @Test
     public void canSetItsData() throws IOException {
-        Queue queue = client.queues("foo");
         String jid = queue.recur("Foo", null, 60, null);
         RecurringJob job = (RecurringJob)client.jobs(jid);
         job.data("foo", "bar");
@@ -116,7 +118,6 @@ public class RecurringJobIntegrationTest {
 
     @Test
     public void canSetItsKlass() throws IOException {
-        Queue queue = client.queues("foo");
         String jid = queue.recur("Foo", null, 60, null);
         RecurringJob job = (RecurringJob)client.jobs(jid);
         job.klass("Foo");
@@ -126,7 +127,6 @@ public class RecurringJobIntegrationTest {
 
     @Test
     public void canSetItsQueue() throws IOException {
-        Queue queue = client.queues("foo");
         String jid = queue.recur("Foo", null, 60, null);
         RecurringJob job = (RecurringJob)client.jobs(jid);
         job.requeue("bar");
@@ -136,7 +136,6 @@ public class RecurringJobIntegrationTest {
 
     @Test
     public void canSetItsBacklog() throws IOException {
-        Queue queue = client.queues("foo");
         String jid = queue.recur("Foo", null, 60, null);
         RecurringJob job = (RecurringJob)client.jobs(jid);
         job.backlog(1);
@@ -158,7 +157,6 @@ public class RecurringJobIntegrationTest {
 
     @Test
     public void canCancelItself() throws IOException {
-        Queue queue = client.queues("foo");
         String jid = queue.recur("Foo", null, 60, null);
         client.jobs(jid).cancel();
         Assert.assertEquals(null, client.jobs(jid));
@@ -166,7 +164,6 @@ public class RecurringJobIntegrationTest {
 
     @Test
     public void canSetItsTags() throws IOException {
-        Queue queue = client.queues("foo");
         String jid = queue.recur("Foo", null, 60, null);
         client.jobs(jid).tag("foo");
         Assert.assertEquals("foo", client.jobs(jid).tags().get(0));
@@ -193,7 +190,6 @@ public class RecurringJobIntegrationTest {
 
     @Test
     public void lastSpawnedJobReturnsNullIfNoJobHasEverBeenSpawned() throws IOException {
-        Queue queue = client.queues("foo");
         String jid = queue.recur("Foo", null, 60, null);
         Assert.assertEquals(null, ((RecurringJob)client.jobs(jid)).lastSpawnedJid());
         Assert.assertEquals(null, ((RecurringJob)client.jobs(jid)).lastSpawnedJob());

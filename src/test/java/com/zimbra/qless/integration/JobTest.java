@@ -12,7 +12,7 @@
  * ***** END LICENSE BLOCK *****
  */
 
-package com.zimbra.qless;
+package com.zimbra.qless.integration;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -31,22 +31,28 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.exceptions.JedisDataException;
 
+import com.zimbra.qless.Client;
+import com.zimbra.qless.JSON;
+import com.zimbra.qless.Job;
+import com.zimbra.qless.Queue;
 
-public class JobIntegrationTest {
-    final Logger LOGGER = LoggerFactory.getLogger(JobIntegrationTest.class);
+
+public class JobTest {
+    final Logger LOGGER = LoggerFactory.getLogger(JobTest.class);
     JedisPool jedisPool = new JedisPool("localhost");
     Client client;
+    Queue queue;
     
     @Before
     public void before() throws IOException {
         Jedis jedis = jedisPool.getResource();
         client = new Client(jedisPool);
         jedis.flushDB();
+        queue = client.queue("foo");
     }
     
     @Test
     public void canSpecifyJidInPutAndKlassAsString() throws IOException {
-        Queue queue = client.queues("foo");
         Map<String, Object> opts = new HashMap<>();
         opts.put("jid", "a");
         String jid = queue.put("Qless::Job", null, opts);
@@ -56,7 +62,6 @@ public class JobIntegrationTest {
     @Test
     @SuppressWarnings("rawtypes")
     public void hasExpectedProperties() throws IOException {
-        Queue queue = client.queues("foo");
         Map<String, Object> data = new HashMap<>();
         data.put("whiz",  "bang");
         Map<String, Object> opts = new HashMap<>();
@@ -83,7 +88,6 @@ public class JobIntegrationTest {
 
     @Test
     public void canSetItsOwnPriority() throws IOException {
-        Queue queue = client.queues("foo");
         Map<String, Object> opts = new HashMap<>();
         opts.put("jid", "jid");
         opts.put("priority", 0);
@@ -96,7 +100,6 @@ public class JobIntegrationTest {
 
     @Test
     public void exposesItsQueueObject() throws IOException {
-        Queue queue = client.queues("foo");
         String jid = queue.put("Foo", null, null);
         Job job = client.jobs(jid);
         Assert.assertEquals(job.queueName(), job.queue().name());
@@ -115,7 +118,6 @@ public class JobIntegrationTest {
     @Test
     public void exposesItsTtl() throws IOException {
         client.config().put("heartbeat", 10);
-        Queue queue = client.queues("foo");
         queue.put("Foo", null, null);
         Job job = queue.pop();
         int ttl = job.ttl();
@@ -124,7 +126,6 @@ public class JobIntegrationTest {
 
     @Test
     public void exposesItsCancelMethod() throws IOException {
-        Queue queue = client.queues("foo");
         String jid = queue.put("Foo", null, null);
         client.jobs(jid).cancel();
         Assert.assertEquals(null, client.jobs(jid));
@@ -132,7 +133,6 @@ public class JobIntegrationTest {
 
     @Test
     public void canTagItself() throws IOException {
-        Queue queue = client.queues("foo");
         String jid = queue.put("Foo", null, null);
         client.jobs(jid).tag("foo");
         Assert.assertEquals("foo", client.jobs(jid).tags().get(0));
@@ -140,7 +140,6 @@ public class JobIntegrationTest {
 
     @Test
     public void canUntagItself() throws IOException {
-        Queue queue = client.queues("foo");
         Map<String, Object> opts = new HashMap<>();
         opts.put("jid", "jid");
         opts.put("tags", Arrays.asList("foo"));
@@ -151,7 +150,6 @@ public class JobIntegrationTest {
 
     @Test
     public void exposesDataAccess() throws IOException {
-        Queue queue = client.queues("foo");
         Map<String, Object> data = new HashMap<>();
         data.put("whiz",  "bang");
         String jid = queue.put("Foo", data, null);
@@ -160,7 +158,6 @@ public class JobIntegrationTest {
 
     @Test
     public void exposesDataAssignment() throws IOException {
-        Queue queue = client.queues("foo");
         String jid = queue.put("Foo", null, null);
         Job job = client.jobs(jid);
         job.data("foo", "bar");
@@ -169,7 +166,6 @@ public class JobIntegrationTest {
 
     @Test
     public void canMoveItself() throws IOException {
-        Queue queue = client.queues("foo");
         String jid = queue.put("Foo", null, null);
         client.jobs(jid).requeue("bar");
         Assert.assertEquals("bar", client.jobs(jid).queue().name());
@@ -178,7 +174,6 @@ public class JobIntegrationTest {
 
     @Test
     public void failsWhenRequeingACancelledJob() throws IOException {
-        Queue queue = client.queues("foo");
         String jid = queue.put("Foo", null, null);
         Job job = client.jobs(jid); 
         client.jobs(jid).cancel(); // Cancel a different instance that represents the same job
@@ -191,7 +186,6 @@ public class JobIntegrationTest {
 
     @Test
     public void canCompleteItself() throws IOException {
-        Queue queue = client.queues("foo");
         String jid = queue.put("Foo", null, null);
         queue.pop().complete();
         Assert.assertEquals("complete", client.jobs(jid).state());
@@ -199,7 +193,6 @@ public class JobIntegrationTest {
 
     @Test
     public void canAdvanceItselfToAnotherQueue() throws IOException {
-        Queue queue = client.queues("foo");
         String jid = queue.put("Foo", null, null);
         queue.pop().complete("bar");
         Assert.assertEquals("waiting", client.jobs(jid).state());
@@ -230,7 +223,6 @@ public class JobIntegrationTest {
 
     @Test
     public void knowsIfItIsTracked() throws IOException {
-        Queue queue = client.queues("foo");
         String jid = queue.put("Foo", null, null);
         Assert.assertEquals(false, client.jobs(jid).tracked());
         client.jobs(jid).track();
@@ -241,7 +233,6 @@ public class JobIntegrationTest {
 
     @Test
     public void canAddAndRemoveDependencies() throws IOException {
-        Queue queue = client.queues("foo");
         String jidA = queue.put("Foo", null, null);
         String jidB = queue.put("Foo", null, null);
         Map<String,Object> opts = new HashMap<>();
@@ -270,7 +261,6 @@ public class JobIntegrationTest {
 
     @Test
     public void hasAReasonableToString() throws IOException {
-        Queue queue = client.queues("foo");
         String jid = queue.put("Foo", null, null);
         String s = client.jobs(jid).toString();
         Assert.assertTrue(s.contains("Foo (" + jid + " / foo / waiting)"));
@@ -302,7 +292,6 @@ public class JobIntegrationTest {
 
     @Test
     public void exposesFailingAJob() throws IOException {
-        Queue queue = client.queues("foo");
         String jid = queue.put("Foo", null, null);
         queue.pop().fail("foo", "message");
         Assert.assertEquals("failed", client.jobs(jid).state());
@@ -332,7 +321,6 @@ public class JobIntegrationTest {
 
     @Test
     public void providesAccessToLog() throws IOException {
-        Queue queue = client.queues("foo");
         String jid = queue.put("Foo", null, null);
         client.jobs(jid).log("hello");
         Map<String,Object> data = new HashMap<>();
@@ -363,7 +351,6 @@ public class JobIntegrationTest {
 //      end
     @Test
     public void returnsNullFromSpawnedFromWhenItIsNotARecurringJob() throws IOException {
-        Queue queue = client.queues("foo");
         String jid = queue.put("Foo", null, null);
         Assert.assertEquals(null, client.jobs(jid).spawnedFrom());
     }

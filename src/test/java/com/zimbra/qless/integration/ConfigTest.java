@@ -12,7 +12,7 @@
  * ***** END LICENSE BLOCK *****
  */
 
-package com.zimbra.qless;
+package com.zimbra.qless.integration;
 
 import java.io.IOException;
 import java.util.Map;
@@ -24,12 +24,14 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.zimbra.qless.Client;
+
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
 
-public class ConfigIntegrationTest {
-    final Logger LOGGER = LoggerFactory.getLogger(ConfigIntegrationTest.class);
+public class ConfigTest {
+    final Logger LOGGER = LoggerFactory.getLogger(ConfigTest.class);
     JedisPool jedisPool = new JedisPool("localhost");
     Client client;
     

@@ -12,7 +12,7 @@
  * ***** END LICENSE BLOCK *****
  */
 
-package com.zimbra.qless;
+package com.zimbra.qless.integration;
 
 import java.io.IOException;
 
@@ -28,8 +28,8 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
 
-public class LuaPluginIntegrationTest {
-    final Logger LOGGER = LoggerFactory.getLogger(LuaPluginIntegrationTest.class);
+public class LuaPluginTest {
+    final Logger LOGGER = LoggerFactory.getLogger(LuaPluginTest.class);
     JedisPool jedisPool = new JedisPool("localhost");
     Jedis jedis;
     

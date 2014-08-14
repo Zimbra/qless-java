@@ -32,9 +32,10 @@ public class Client {
     final Logger LOGGER = LoggerFactory.getLogger(Client.class);
     protected JedisPool jedisPool;
     protected LuaScript luaScript;
-    protected ClientJobs jobs = new ClientJobs(this);
     protected ClientConfig config = new ClientConfig(this);
     protected ClientEvents events;
+    protected ClientJobs jobs = new ClientJobs(this);
+    protected ClientQueues queues = new ClientQueues(this);
 
     public Client(JedisPool jedisPool) {
         this.jedisPool = jedisPool;
@@ -108,8 +109,12 @@ public class Client {
         return name.split("@")[0];
     }
     
-    Queue queues(String queueName) {
-        return new Queue(queueName, this);
+    public Queue queue(String name) {
+        return new Queue(name, this);
+    }
+    
+    public ClientQueues queues() throws IOException {
+        return queues;
     }
     
     public String workerName() {
