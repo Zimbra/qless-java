@@ -1,6 +1,8 @@
 package com.zimbra.qless.web.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.zimbra.qless.web.service.QueueService;
+import com.zimbra.qless.web.viewmodel.Tab;
 
 @Controller
 public class OverviewController {
@@ -20,9 +23,18 @@ public class OverviewController {
 
     @RequestMapping("/")
     public String listQueues(Map<String, Object> map) throws IOException {
-        LOGGER.debug("** listQueues");
-        map.put("queueList", queueService.listQueues());
-        LOGGER.debug("** listQueues", queueService.listQueues());
+    	List<Tab> tabs = new ArrayList<Tab>();
+    	tabs.add(new Tab("Queues"   , "/queues"));
+    	tabs.add(new Tab("Workers"  , "/workers"));
+    	tabs.add(new Tab("Track"    , "/track"));
+    	tabs.add(new Tab("Failed"   , "/failed"));
+    	tabs.add(new Tab("Completed", "/completed"));
+    	tabs.add(new Tab("Config"   , "/config"));
+    	tabs.add(new Tab("About"    , "/about"));
+    	map.put("tabs", tabs);
+    	map.put("application_name", "Zimbra Qless Web");
+    	
+        map.put("queues", queueService.listQueues());
         return "overview";
     }
 }
