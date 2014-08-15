@@ -23,6 +23,24 @@ public class OverviewController {
 
     @RequestMapping("/")
     public String listQueues(Map<String, Object> map) throws IOException {
+    	setDefaults(map);
+        map.put("queues", queueService.listQueues());
+        return "overview";
+    }
+
+    @RequestMapping("/about")
+    public String about(Map<String, Object> map) throws IOException {
+    	setDefaults(map);
+        map.put("queues", queueService.listQueues());
+        return "about";
+    }
+    
+    static void setDefaults(Map<String, Object> map) {
+    	map.put("tabs", getTabs());
+    	map.put("application_name", "Zimbra Qless Web");
+    }
+    
+    static List<Tab> getTabs() {
     	List<Tab> tabs = new ArrayList<Tab>();
     	tabs.add(new Tab("Queues"   , "/queues"));
     	tabs.add(new Tab("Workers"  , "/workers"));
@@ -31,10 +49,6 @@ public class OverviewController {
     	tabs.add(new Tab("Completed", "/completed"));
     	tabs.add(new Tab("Config"   , "/config"));
     	tabs.add(new Tab("About"    , "/about"));
-    	map.put("tabs", tabs);
-    	map.put("application_name", "Zimbra Qless Web");
-    	
-        map.put("queues", queueService.listQueues());
-        return "overview";
+    	return tabs;
     }
 }
