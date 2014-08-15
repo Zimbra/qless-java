@@ -66,6 +66,38 @@ public class QueueCounts {
         this.scheduled = scheduled;
     }
     
+    public String getName() {
+        return name;
+    }
+    
+    public boolean getPaused() {
+    	return paused;
+    }
+    
+    public int getRunning() {
+    	return running;
+    }
+    
+    public int getWaiting() {
+    	return waiting;
+    }
+    
+    public int getRecurring() {
+    	return recurring;
+    }
+    
+    public int getDepends() {
+    	return depends;
+    }
+    
+    public int getStalled() {
+    	return stalled;
+    }
+    
+    public int getScheduled() {
+    	return scheduled;
+    }
+    
     public String toString() {
         return Objects.toStringHelper(this)
                 .add("name", name)
