@@ -9,9 +9,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.zimbra.qless.Client;
+import com.zimbra.qless.JSON;
+import com.zimbra.qless.Queue;
 import com.zimbra.qless.web.viewmodel.Tab;
 
 @Controller
@@ -46,6 +49,26 @@ public class OverviewController {
     	setDefaults(map);
         map.put("queues", qlessClient.queues().counts());
         return "queues";
+    }
+
+    @RequestMapping(value="/queues/{queue}")
+    public String queue(@PathVariable("queue") String queue, Map<String, Object> map) throws Exception {
+    	return queueTab(queue, "stats", map);
+    }
+
+    @RequestMapping(value="/queues/{queue}/{tab}")
+    public String queueTab(@PathVariable("queue") String queue, @PathVariable("tab") String tab, Map<String, Object> map) throws Exception {
+    	setDefaults(map);
+    	Queue q = qlessClient.queue(queue);
+    	Map<String,Object> stats = q.stats();
+        map.put("queue", q);
+        map.put("counts", q.counts());
+        map.put("stats", stats);
+        map.put("tab", tab);
+        map.put("waitStatsHistogram", JSON.stringify(((Map)stats.get("wait")).get("histogram")));
+        map.put("runStatsHistogram", JSON.stringify(((Map)stats.get("run")).get("histogram")));
+        LOGGER.debug("Queue stats", q.stats());
+        return "queue";
     }
 
     static void setDefaults(Map<String, Object> map) {

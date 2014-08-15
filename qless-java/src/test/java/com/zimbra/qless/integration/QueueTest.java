@@ -102,7 +102,8 @@ public class QueueTest {
 
     @Test
     public void exposesQueueStatistics() throws IOException {
-        Assert.assertTrue(queue.stats() != null);
+    	Object stats = queue.stats();
+        Assert.assertTrue(stats != null);
     }
 
     @Test

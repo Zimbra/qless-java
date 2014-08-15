@@ -19,14 +19,35 @@
 	</thead>
 	<tbody>
 		<c:forEach items="${queues}" var="queue">
-		<tr>
-			<td>${queue.name}</td>
-			<td>${queue.running}</td>
-			<td>${queue.waiting}</td>
-			<td>${queue.scheduled}</td>
-			<td>${queue.stalled}</td>
-			<td>${queue.depends}</td>
-			<td>${queue.recurring}</td>
+	    <tr class="queue-row">
+    	  <td class="queue-column large-text">
+            <c:choose>
+            <c:when test="queue.paused">
+    	      <button
+                id="${queue.name}-pause"
+	            title="Unpause"
+    	        class="btn btn-success"
+        	    onclick="unpause('${queue.name}')"><i class="icon-play"></i>
+	          </button>
+	        </c:when>
+	        <c:otherwise>
+	          <button
+    	        id="${queue.name}-pause"
+        	    title="Pause"
+                class="btn btn-warning"
+	            onclick="pause('${queue.name}')"><i class="icon-pause"></i>
+    	      </button>
+        	</c:otherwise>
+        	</c:choose>
+            <a href="/queues/<c:url value="${queue.name}"/>">${queue.name}</a>
+	      </td>
+		  <td>${queue.name}</td>
+		  <td>${queue.running}</td>
+		  <td>${queue.waiting}</td>
+		  <td>${queue.scheduled}</td>
+		  <td>${queue.stalled}</td>
+		  <td>${queue.depends}</td>
+		  <td>${queue.recurring}</td>
 		</tr>
 		</c:forEach>
 	</tbody>
