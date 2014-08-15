@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.zimbra.qless.web.service.QueueService;
+import com.zimbra.qless.Client;
 import com.zimbra.qless.web.viewmodel.Tab;
 
 @Controller
@@ -19,20 +19,26 @@ public class OverviewController {
     final Logger LOGGER = LoggerFactory.getLogger(OverviewController.class);
 
     @Autowired
-    private QueueService queueService;
+    private Client qlessClient;
 
     @RequestMapping("/")
-    public String listQueues(Map<String, Object> map) throws IOException {
+    public String overview(Map<String, Object> map) throws IOException {
     	setDefaults(map);
-        map.put("queues", queueService.listQueues());
+        map.put("queues", qlessClient.queues().counts());
         return "overview";
     }
 
     @RequestMapping("/about")
     public String about(Map<String, Object> map) throws IOException {
     	setDefaults(map);
-        map.put("queues", queueService.listQueues());
         return "about";
+    }
+    
+    @RequestMapping("/config")
+    public String config(Map<String, Object> map) throws IOException {
+    	setDefaults(map);
+        map.put("options", qlessClient.config().all());
+        return "config";
     }
     
     static void setDefaults(Map<String, Object> map) {
