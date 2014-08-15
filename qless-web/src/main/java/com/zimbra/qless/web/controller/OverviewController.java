@@ -41,9 +41,16 @@ public class OverviewController {
         return "config";
     }
     
+    @RequestMapping("/queues")
+    public String queues(Map<String, Object> map) throws IOException {
+    	setDefaults(map);
+        map.put("queues", qlessClient.queues().counts());
+        return "queues";
+    }
+
     static void setDefaults(Map<String, Object> map) {
     	map.put("tabs", getTabs());
-    	map.put("application_name", "Zimbra Qless Web");
+    	map.put("application_name", "Qless Web");
     }
     
     static List<Tab> getTabs() {
