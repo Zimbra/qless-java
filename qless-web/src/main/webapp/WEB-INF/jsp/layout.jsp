@@ -354,6 +354,7 @@
             <span class="icon-bar"></span>
           </a>
           <a class="brand" href="/">${application_name}</a>
+          <a class="brand" href="http://zimbra.com">by <img src="/img/zimbra.png" alt="Zimbra" style="height:25px"/></a>
           <div class="nav-collapse">
             <ul class="nav nav-bar">
             <c:forEach items="${tabs}" var="tab">
