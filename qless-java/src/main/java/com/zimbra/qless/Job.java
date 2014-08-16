@@ -103,10 +103,6 @@ public class Job {
         client.call("cancel", jid);
     }
     
-    public void complete() throws IOException {
-        complete(null);
-    }
-    
     public void complete(String nextQueue) throws IOException {
         complete(nextQueue, null);
     }
@@ -125,10 +121,6 @@ public class Job {
                     "depends", JSON.stringify(OptsHelper.getList(opts, "depends"))
                     );
         }
-    }
-    
-    public Map<String,Object> data() {
-        return data;
     }
     
     public Object data(String key) {
@@ -150,18 +142,6 @@ public class Job {
         client.call("depends", array);
     }
     
-    public List<String> dependencies() {
-        return dependencies;
-    }
-    
-    public List<String> dependents() {
-        return dependents;
-    }
-    
-    public int expiresAt() {
-        return expiresAt;
-    }
-    
     public void fail(String group, String message) throws IOException {
         client.call("fail", jid, client.workerName(), group, message, JSON.stringify(data));
     }
@@ -170,16 +150,87 @@ public class Job {
         return this.failure.get(group);
     }
     
-    public List<History> history() {
+    public Map<String,Object> getData() {
+        return data;
+    }
+    
+    public List<String> getDependencies() {
+        return dependencies;
+    }
+    
+    public List<String> getDependents() {
+        return dependents;
+    }
+    
+    public int getExpiresAt() {
+        return expiresAt;
+    }
+    
+    public List<History> getHistory() {
         return history;
     }
     
-    public String jid() {
+    public String getJid() {
         return jid;
     }
     
-    public String klassName() {
+    public String getKlassName() {
         return klassName;
+    }
+    
+    public int getOriginalRetries() {
+        return originalRetries;
+    }
+    
+    public int getPriority() {
+        return priority;
+    }
+    
+    public Queue getQueue() {
+        if (this.queue == null) {
+            this.queue = new Queue(queueName, client);
+        }
+        return this.queue;
+    }
+    
+    public String getQueueName() {
+        return queueName;
+    }
+    
+    public int getRetriesLeft() {
+        return retriesLeft;
+    }
+    
+    public String getSpawnedFrom() {
+        return spawnedFromJid;
+    }
+    
+    public String getState() {
+        return state;
+    }
+    
+    public List<String> getTags() {
+        return tags;
+    }
+    
+    public boolean getTracked() {
+        return tracked;
+    }
+    
+    public int getTtl() {
+        return expiresAt - (int)(System.currentTimeMillis() / 1000);
+    }
+    
+    public String getWorkerName() {
+        return workerName;
+    }
+    
+    public void isComplete() throws IOException {
+        complete(null);
+    }
+    
+    public boolean isRecurring() {
+    	return false;
     }
     
     public void log(String message) throws IOException {
@@ -190,28 +241,9 @@ public class Job {
         client.call("log",  jid, message, JSON.stringify(data));
     }
     
-    public int originalRetries() {
-        return originalRetries;
-    }
-    
-    public int priority() {
-        return priority;
-    }
-    
     public void priority(int priority) throws IOException {
         client.call("priority", jid, Integer.toString(priority));
         this.priority = priority;
-    }
-    
-    public Queue queue() {
-        if (this.queue == null) {
-            this.queue = new Queue(queueName, client);
-        }
-        return this.queue;
-    }
-    
-    public String queueName() {
-        return queueName;
     }
     
     public void requeue(String queue) throws IOException {
@@ -225,19 +257,7 @@ public class Job {
                 "priority", OptsHelper.get(opts, "priority", Integer.toString(priority)),
                 "tags", JSON.stringify(OptsHelper.getList(opts, "tags", tags)),
                 "retries", OptsHelper.get(opts, "retries", "5"),
-                "depends", JSON.stringify(OptsHelper.getList(opts, "depends", dependencies())));
-    }
-    
-    public int retriesLeft() {
-        return retriesLeft;
-    }
-    
-    public String spawnedFrom() {
-        return spawnedFromJid;
-    }
-    
-    public String state() {
-        return state;
+                "depends", JSON.stringify(OptsHelper.getList(opts, "depends", getDependencies())));
     }
     
     public void tag(String... tags) throws IOException {
@@ -251,17 +271,9 @@ public class Job {
         client.call("tag", args);
     }
     
-    public List<String> tags() {
-        return tags;
-    }
-    
     public void track() throws IOException {
         client.call("track", "track", jid);
         tracked = true;
-    }
-    
-    public boolean tracked() {
-        return tracked;
     }
     
     public String toString() {
@@ -269,13 +281,9 @@ public class Job {
             .append(getClass().getName())
             .append(' ').append(klassName)
             .append(" (") 
-            .append(jid).append(" / ").append(queueName()).append(" / ").append(state)
+            .append(jid).append(" / ").append(getQueueName()).append(" / ").append(state)
             .append(')')
             .toString();
-    }
-    
-    public int ttl() {
-        return expiresAt - (int)(System.currentTimeMillis() / 1000);
     }
     
     public void undepend(String... jids) throws IOException {
@@ -303,10 +311,6 @@ public class Job {
     public void untrack() throws IOException {
         client.call("track", "untrack", jid);
         tracked = false;
-    }
-    
-    public String workerName() {
-        return workerName;
     }
     
     

@@ -68,6 +68,11 @@ public class OverviewController {
         map.put("waitStatsHistogram", JSON.stringify(((Map)stats.get("wait")).get("histogram")));
         map.put("runStatsHistogram", JSON.stringify(((Map)stats.get("run")).get("histogram")));
         LOGGER.debug("Queue stats", q.stats());
+        if ("waiting".equals(tab)) {
+            map.put("jobs", q.peek(20));
+        } else if (getTabs().contains(tab)) {
+        	map.put("jobs", q.jobs().jobs(tab)); // TODO pagination
+        }
         return "queue";
     }
 

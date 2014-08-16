@@ -70,20 +70,20 @@ public class JobTest {
         opts.put("retries", "3");
         String jid = queue.put("Foo", data, opts);
         Job job = client.jobs(jid);
-        Assert.assertEquals("jid", job.jid());
-        Assert.assertNotNull(job.data());
-        Assert.assertTrue(job.data() instanceof Map);
-        Assert.assertEquals("bang", ((Map)job.data()).get("whiz"));
-        Assert.assertEquals("[\"foo\"]", JSON.stringify(job.tags()));
-        Assert.assertEquals(0, job.priority());
-        Assert.assertEquals(0, job.expiresAt());
-        Assert.assertEquals("[]", JSON.stringify(job.dependents()));
-        Assert.assertEquals("Foo", job.klassName());
-        Assert.assertEquals("foo", job.queueName());
-        Assert.assertEquals("", job.workerName());
-        Assert.assertEquals(3, job.retriesLeft());
-        Assert.assertEquals("[]", JSON.stringify(job.dependencies()));
-        Assert.assertEquals(3, job.originalRetries());
+        Assert.assertEquals("jid", job.getJid());
+        Assert.assertNotNull(job.getData());
+        Assert.assertTrue(job.getData() instanceof Map);
+        Assert.assertEquals("bang", ((Map)job.getData()).get("whiz"));
+        Assert.assertEquals("[\"foo\"]", JSON.stringify(job.getTags()));
+        Assert.assertEquals(0, job.getPriority());
+        Assert.assertEquals(0, job.getExpiresAt());
+        Assert.assertEquals("[]", JSON.stringify(job.getDependents()));
+        Assert.assertEquals("Foo", job.getKlassName());
+        Assert.assertEquals("foo", job.getQueueName());
+        Assert.assertEquals("", job.getWorkerName());
+        Assert.assertEquals(3, job.getRetriesLeft());
+        Assert.assertEquals("[]", JSON.stringify(job.getDependencies()));
+        Assert.assertEquals(3, job.getOriginalRetries());
     }
 
     @Test
@@ -93,17 +93,17 @@ public class JobTest {
         opts.put("priority", 0);
         @SuppressWarnings("unused")
         String jid = queue.put("Foo", null, opts);
-        Assert.assertEquals(0, client.jobs("jid").priority());
+        Assert.assertEquals(0, client.jobs("jid").getPriority());
         client.jobs("jid").priority(10);
-        Assert.assertEquals(10, client.jobs("jid").priority());
+        Assert.assertEquals(10, client.jobs("jid").getPriority());
     }
 
     @Test
     public void exposesItsQueueObject() throws IOException {
         String jid = queue.put("Foo", null, null);
         Job job = client.jobs(jid);
-        Assert.assertEquals(job.queueName(), job.queue().name());
-        Assert.assertTrue(job.queue() instanceof Queue);
+        Assert.assertEquals(job.getQueueName(), job.getQueue().getName());
+        Assert.assertTrue(job.getQueue() instanceof Queue);
     }
     
 //        it 'exposes its klass' do
@@ -120,7 +120,7 @@ public class JobTest {
         client.config().put("heartbeat", 10);
         queue.put("Foo", null, null);
         Job job = queue.pop();
-        int ttl = job.ttl();
+        int ttl = job.getTtl();
         Assert.assertTrue(ttl >= 9 && ttl <= 10);
     }
 
@@ -135,7 +135,7 @@ public class JobTest {
     public void canTagItself() throws IOException {
         String jid = queue.put("Foo", null, null);
         client.jobs(jid).tag("foo");
-        Assert.assertEquals("foo", client.jobs(jid).tags().get(0));
+        Assert.assertEquals("foo", client.jobs(jid).getTags().get(0));
     }
 
     @Test
@@ -145,7 +145,7 @@ public class JobTest {
         opts.put("tags", Arrays.asList("foo"));
         String jid = queue.put("Foo", null, opts);
         client.jobs(jid).untag("foo");
-        Assert.assertEquals(0, client.jobs(jid).tags().size());
+        Assert.assertEquals(0, client.jobs(jid).getTags().size());
     }
 
     @Test
@@ -168,8 +168,8 @@ public class JobTest {
     public void canMoveItself() throws IOException {
         String jid = queue.put("Foo", null, null);
         client.jobs(jid).requeue("bar");
-        Assert.assertEquals("bar", client.jobs(jid).queue().name());
-        Assert.assertEquals("bar", client.jobs(jid).queueName());
+        Assert.assertEquals("bar", client.jobs(jid).getQueue().getName());
+        Assert.assertEquals("bar", client.jobs(jid).getQueueName());
     }
 
     @Test
@@ -187,15 +187,15 @@ public class JobTest {
     @Test
     public void canCompleteItself() throws IOException {
         String jid = queue.put("Foo", null, null);
-        queue.pop().complete();
-        Assert.assertEquals("complete", client.jobs(jid).state());
+        queue.pop().isComplete();
+        Assert.assertEquals("complete", client.jobs(jid).getState());
     }
 
     @Test
     public void canAdvanceItselfToAnotherQueue() throws IOException {
         String jid = queue.put("Foo", null, null);
         queue.pop().complete("bar");
-        Assert.assertEquals("waiting", client.jobs(jid).state());
+        Assert.assertEquals("waiting", client.jobs(jid).getState());
     }
 
 //        it 'can heartbeat itself' do
@@ -224,11 +224,11 @@ public class JobTest {
     @Test
     public void knowsIfItIsTracked() throws IOException {
         String jid = queue.put("Foo", null, null);
-        Assert.assertEquals(false, client.jobs(jid).tracked());
+        Assert.assertEquals(false, client.jobs(jid).getTracked());
         client.jobs(jid).track();
-        Assert.assertEquals(true, client.jobs(jid).tracked());
+        Assert.assertEquals(true, client.jobs(jid).getTracked());
         client.jobs(jid).untrack();
-        Assert.assertEquals(false, client.jobs(jid).tracked());
+        Assert.assertEquals(false, client.jobs(jid).getTracked());
     }
 
     @Test
@@ -238,16 +238,16 @@ public class JobTest {
         Map<String,Object> opts = new HashMap<>();
         opts.put("depends", Arrays.asList(jidA));
         String jidC = queue.put("Foo", null, opts);
-        Assert.assertNotNull(client.jobs(jidC).dependencies());
-        Assert.assertEquals(1, client.jobs(jidC).dependencies().size());
-        Assert.assertEquals(jidA, client.jobs(jidC).dependencies().get(0));
+        Assert.assertNotNull(client.jobs(jidC).getDependencies());
+        Assert.assertEquals(1, client.jobs(jidC).getDependencies().size());
+        Assert.assertEquals(jidA, client.jobs(jidC).getDependencies().get(0));
         client.jobs(jidC).depend(jidB);
-        Assert.assertEquals(2, client.jobs(jidC).dependencies().size());
-        Assert.assertTrue(client.jobs(jidC).dependencies().contains(jidA));
-        Assert.assertTrue(client.jobs(jidC).dependencies().contains(jidB));
+        Assert.assertEquals(2, client.jobs(jidC).getDependencies().size());
+        Assert.assertTrue(client.jobs(jidC).getDependencies().contains(jidA));
+        Assert.assertTrue(client.jobs(jidC).getDependencies().contains(jidB));
         client.jobs(jidC).undepend(jidA);
-        Assert.assertEquals(1, client.jobs(jidC).dependencies().size());
-        Assert.assertEquals(jidB, client.jobs(jidC).dependencies().get(0));
+        Assert.assertEquals(1, client.jobs(jidC).getDependencies().size());
+        Assert.assertEquals(jidB, client.jobs(jidC).getDependencies().get(0));
     }
 
 //        it 'raises an error if retry fails' do
@@ -294,7 +294,7 @@ public class JobTest {
     public void exposesFailingAJob() throws IOException {
         String jid = queue.put("Foo", null, null);
         queue.pop().fail("foo", "message");
-        Assert.assertEquals("failed", client.jobs(jid).state());
+        Assert.assertEquals("failed", client.jobs(jid).getState());
         Assert.assertEquals("foo", client.jobs(jid).failure("group"));
         Assert.assertEquals("message", client.jobs(jid).failure("message"));
     }
@@ -326,7 +326,7 @@ public class JobTest {
         Map<String,Object> data = new HashMap<>();
         data.put("foo", "bar");
         client.jobs(jid).log("hello", data);
-        List<Job.History> history = client.jobs(jid).history(); 
+        List<Job.History> history = client.jobs(jid).getHistory(); 
         Assert.assertNotNull(history);
         Assert.assertEquals(3, history.size());
         Assert.assertEquals("hello", history.get(1).what());
@@ -352,6 +352,6 @@ public class JobTest {
     @Test
     public void returnsNullFromSpawnedFromWhenItIsNotARecurringJob() throws IOException {
         String jid = queue.put("Foo", null, null);
-        Assert.assertEquals(null, client.jobs(jid).spawnedFrom());
+        Assert.assertEquals(null, client.jobs(jid).getSpawnedFrom());
     }
 }

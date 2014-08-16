@@ -53,7 +53,7 @@ public class QueuesTest {
     public void providesAccessToQueues() throws IOException {
         client.queue("A").put("Foo", null, null);
         ClientQueues queues = client.queues();
-        Assert.assertEquals("A", queues.get("A").name());
+        Assert.assertEquals("A", queues.get("A").getName());
     }
     
     @Test

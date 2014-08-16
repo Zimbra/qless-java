@@ -78,6 +78,11 @@ public class RecurringJob extends Job {
         this.interval = interval;
     }
     
+    @Override
+    public boolean isRecurring() {
+    	return true;
+    }
+    
     public void klass(String klass) throws IOException {
         client.call("recur.update", jid, "klass", klass);
         this.klassName = klass;

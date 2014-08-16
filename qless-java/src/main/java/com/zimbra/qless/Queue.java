@@ -45,6 +45,10 @@ public class Queue {
         return JSON.parse(result.toString(), javaType);
     }
     
+    public String getName() {
+        return name;
+    }
+    
     public int heartbeat() throws IOException {
         return Integer.parseInt(client.config.get("heartbeat").toString());
     }
@@ -81,10 +85,6 @@ public class Queue {
     
     public void maxConcurrency(int maxConcurrency) throws IOException {
         client.config.put("max-concurrency", maxConcurrency);
-    }
-    
-    public String name() {
-        return name;
     }
     
     public void pause() throws IOException {

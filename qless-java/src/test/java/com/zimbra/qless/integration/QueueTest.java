@@ -90,7 +90,7 @@ public class QueueTest {
     @Test
     public void exposesQueuePeeking() throws IOException {
         String jid = queue.put("Foo", null, null);
-        Assert.assertEquals(jid, queue.peek().jid());
+        Assert.assertEquals(jid, queue.peek().getJid());
     }
 
     @Test

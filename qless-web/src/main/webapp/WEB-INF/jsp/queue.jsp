@@ -85,6 +85,7 @@
 <c:when test="${tab != 'stats'}">
   <hr/>
   <!-- TODO erb :_job_list, :locals => { :jobs => jobs, :queues => queues }  -->
+  <%@include file="_jobList.jsp" %>
 </c:when>
 <c:otherwise>
   <div class="row" style="margin-top: 15px">

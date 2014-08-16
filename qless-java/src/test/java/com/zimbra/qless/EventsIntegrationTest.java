@@ -58,7 +58,7 @@ public class EventsIntegrationTest {
         untracked.cancel();
         Thread.sleep(100);
         Assert.assertEquals(1, eventCapture.jidsForEvent("canceled").size());
-        Assert.assertEquals(tracked.jid(), eventCapture.jidsForEvent("canceled").iterator().next());
+        Assert.assertEquals(tracked.getJid(), eventCapture.jidsForEvent("canceled").iterator().next());
     }
     
     @Test
@@ -66,11 +66,11 @@ public class EventsIntegrationTest {
         final EventCapture eventCapture = new EventCapture();
         client.events().on("completed").fire(eventCapture);
         for (Job job: queue.pop(10)) {
-            job.complete();
+            job.isComplete();
         }
         Thread.sleep(100);
         Assert.assertEquals(1, eventCapture.jidsForEvent("completed").size());
-        Assert.assertEquals(tracked.jid(), eventCapture.jidsForEvent("completed").iterator().next());
+        Assert.assertEquals(tracked.getJid(), eventCapture.jidsForEvent("completed").iterator().next());
     }
 
     @Test
@@ -82,7 +82,7 @@ public class EventsIntegrationTest {
         }
         Thread.sleep(100);
         Assert.assertEquals(1, eventCapture.jidsForEvent("failed").size());
-        Assert.assertEquals(tracked.jid(), eventCapture.jidsForEvent("failed").iterator().next());
+        Assert.assertEquals(tracked.getJid(), eventCapture.jidsForEvent("failed").iterator().next());
     }
 
     @Test
@@ -92,7 +92,7 @@ public class EventsIntegrationTest {
         queue.pop(10);
         Thread.sleep(100);
         Assert.assertEquals(1, eventCapture.jidsForEvent("popped").size());
-        Assert.assertEquals(tracked.jid(), eventCapture.jidsForEvent("popped").iterator().next());
+        Assert.assertEquals(tracked.getJid(), eventCapture.jidsForEvent("popped").iterator().next());
     }
 
     @Test
@@ -103,7 +103,7 @@ public class EventsIntegrationTest {
         untracked.requeue("other");
         Thread.sleep(100);
         Assert.assertEquals(1, eventCapture.jidsForEvent("put").size());
-        Assert.assertEquals(tracked.jid(), eventCapture.jidsForEvent("put").iterator().next());
+        Assert.assertEquals(tracked.getJid(), eventCapture.jidsForEvent("put").iterator().next());
     }
 
     @Test
@@ -116,7 +116,7 @@ public class EventsIntegrationTest {
         queue.pop(2);
         Thread.sleep(100);
         Assert.assertEquals(1, eventCapture.jidsForEvent("stalled").size());
-        Assert.assertEquals(tracked.jid(), eventCapture.jidsForEvent("stalled").iterator().next());
+        Assert.assertEquals(tracked.getJid(), eventCapture.jidsForEvent("stalled").iterator().next());
     }
     
     
