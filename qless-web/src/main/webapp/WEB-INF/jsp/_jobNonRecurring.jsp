@@ -86,16 +86,16 @@
     </div>
     < end -->
 
-    <!-- div class="row">
+    <div class="row">
       <div class="span12 tags" style="margin-bottom: 3px;">
-        < job.tags.each do |tag| >
+        <c:forEach items="${job.tags}" var="tag">
         <div class="btn-group" style="float:left">
-          <span class="tag"><= tag ></span>
+          <span class="tag">${tag}</span>
 			    <button class="btn" onclick="untag('${job.jid}', '${tag}')">
             <i class="icon-remove"></i>
           </button>
         </div>
-        < end -->
+        </c:forEach>
        
         <!-- One for adding new tags -->
         <div class="btn-group" style="float:left">
