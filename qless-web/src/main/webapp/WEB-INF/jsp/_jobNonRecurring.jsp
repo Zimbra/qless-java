@@ -1,4 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <div class="row" id="job-${job.jid}">
   <div class="span12">
@@ -107,41 +108,48 @@
       </div>
     </div>
 
-    <!-- if not defined? brief >
+    <!-- if not defined? brief -->
+    <c:if test="true">
     <div class="row">
       <div class="span6">
         <h3><small>Data</small></h3>
-        <pre style="overflow-y:scroll; height: 200px"><= JSON.pretty_generate(job.data) ></pre>
+        <pre style="overflow-y:scroll; height: 200px"><!-- JSON.pretty_generate(job.data) -->${job.data}</pre>
       </div>
       <div class="span6">
         <h3><small>History</small></h3>
         <div style="overflow-y:scroll; height: 200px">
-          < job.queue_history.reverse.each do |h| >
-          < if h['what'] == 'put' %>
-          	<pre><strong><= h['what'] ></strong> at <= strftime(h['when']) >
-   in queue <strong><= h['q']></strong></pre>
-          < elsif h['what'] == 'popped' >
-          	<pre><strong><= h['what'] ></strong> at <= strftime(h['when']) >
-   by <strong><= h['worker'] ></strong></pre>
-          < elsif h['what'] == 'done' >
-          	<pre><strong>completed</strong> at <= strftime(h['when']) ></pre>
-          < elsif h['what'] == 'failed' >
-          	< if h['worker'] >
-          	  <pre><strong><= h['what'] ></strong> at <= strftime(h['when']) >
-   by <strong><= h['worker'] ></strong>
-   in group <strong><= h['group'] ></strong></pre>
-          	< else >
-          	  <pre><strong><= h['what'] ></strong> at <= strftime(h['when']) >
-   in group <strong><= h['group'] ></strong></pre>
-          	< end >
-          < else >
-          	<pre><strong><= h['what'] ></strong> at <= strftime(h['when']) ></pre>
-          < end >
-          < end >
+          <!-- job.queue_history.reverse.each do |h| -->
+          <c:forEach items="${job.history}" var="h">
+          <c:if test="h.what == 'put'">
+          	<pre><strong>${h.what}</strong> at ${h.when} in queue <strong>${h.q}</strong></pre>
+          </c:if>
+          <c:if test="h.what == 'popped'">
+          	<pre><strong>${h.what}</strong> at ${h.when} by <strong>${h.worker}</strong></pre>
+          </c:if>
+          <c:if test="h.what == 'done'">
+          	<pre><strong>completed</strong> at ${h.when}</pre>
+          </c:if>
+          <c:choose>
+          <c:when test="h.what == 'failed'">
+            <c:choose>
+          	<c:when test="choose">
+          	  <pre><strong>${h.what}</strong> at ${h.when}
+          	  by <strong>${h.worker}</strong> in group <strong>${h.group}</strong></pre>
+          	</c:when>
+          	<c:otherwise>
+          	  <pre><strong>${h.what}</strong> at ${h.when} in group <strong>${h.group}</strong></pre>
+          	</c:otherwise>
+          	</c:choose>
+          </c:when>
+          <c:otherwise>
+          	<pre><strong>${h.what}</strong> at ${h.when}</pre>
+          </c:otherwise>
+          </c:choose>
+          </c:forEach>
         </div>
       </div>
     </div>
-    < end -->
+    </c:if>
 
     <!-- if job.failure.length > 0 >
     <div class="row">

@@ -78,7 +78,7 @@ public class OverviewController {
 
     static void setDefaults(Map<String, Object> map) {
     	map.put("tabs", getTabs());
-    	map.put("application_name", "Qless Web");
+    	map.put("application_name", "Qless");
     }
     
     static List<Tab> getTabs() {
