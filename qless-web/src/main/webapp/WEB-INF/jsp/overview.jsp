@@ -41,7 +41,6 @@
         	</c:choose>
             <a href="/queues/<c:url value="${queue.name}"/>">${queue.name}</a>
 	      </td>
-		  <td>${queue.name}</td>
 		  <td>${queue.running}</td>
 		  <td>${queue.waiting}</td>
 		  <td>${queue.scheduled}</td>
