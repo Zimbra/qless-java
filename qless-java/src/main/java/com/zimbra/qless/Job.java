@@ -270,6 +270,22 @@ public class Job {
                 "depends", JSON.stringify(OptsHelper.getList(opts, "depends", getDependencies())));
     }
     
+    public void retry() throws IOException {
+    	retry(0, null, null);
+    }
+    
+    public void retry(int delay) throws IOException {
+    	retry(delay, null, null);
+    }
+    
+    public void retry(int delay, String group, String message) throws IOException {
+    	if (group == null) {
+    		client.call("retry", jid, queueName, workerName, Integer.toString(delay));
+    	} else {
+    		client.call("retry", jid, queueName, workerName, Integer.toString(delay), group, message);
+    	}
+    }
+    
     public void tag(String... tags) throws IOException {
         List<String> args = new ArrayList<String>();
         for (String arg: Arrays.asList("add", jid)) {

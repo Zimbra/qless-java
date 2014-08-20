@@ -247,13 +247,13 @@ public class JobTest {
         Assert.assertEquals(jidB, client.jobs(jidC).getDependencies().get(0));
     }
 
-//        it 'raises an error if retry fails' do
-//          queue.put('Foo', {}, jid: 'jid')
-//          expect { client.jobs['jid'].retry }.to raise_error
-//        end
     @Test
-    public void raisesAnErrorIfRetryFails() {
-        Assert.fail("NIY"); // TODO
+    public void raisesAnErrorIfRetryFails() throws IOException {
+    	String jid = queue.put("Foo", null, null);
+    	try {
+    		client.jobs(jid).retry();
+    		Assert.fail("Expected an exception to be raised for retying to retry a non-running job");
+    	} catch (Exception e) {}
     }
 
     @Test
