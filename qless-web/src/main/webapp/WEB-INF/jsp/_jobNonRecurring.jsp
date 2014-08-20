@@ -151,17 +151,17 @@
     </div>
     </c:if>
 
-    <!-- if job.failure.length > 0 >
+    <c:if test="job.failure.size > 0 ">
     <div class="row">
       <div class="span12">
         <div class="alert alert-error">
-          <p>In <strong>${job.queueName}</strong> on <strong><= job.failure['worker'] ></strong>
-            about <= strftime(Time.at(job.failure['when'])) ></p>
-          <pre><= job.failure['message'].gsub('>', '&gt;').gsub('<', '&lt;') ></pre>
+          <p>In <strong>${job.queueName}</strong> on <strong>${job.failure.worker}</strong>
+            about <!-- strftime(Time.at(job.failure['when'])) -->${job.failure.when}</p>
+          <pre>${job.failure.message}</pre>
         </div>
       </div>
     </div>
-    < end -->
+    </c:if>
     <hr/>
   </div>
 </div>

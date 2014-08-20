@@ -166,6 +166,10 @@ public class Job {
         return expiresAt;
     }
     
+    public Map<String,Object> getFailure() {
+        return failure;
+    }
+    
     public List<History> getHistory() {
         return history;
     }
