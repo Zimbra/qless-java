@@ -209,13 +209,13 @@ public class JobTest {
         Assert.assertTrue(job.getTtl() > before);
     }
 
-//        it 'raises an error if it fails to heartbeat' do
-//          queue.put('Foo', {}, jid: 'jid')
-//          expect { client.jobs['jid'].heartbeat }.to raise_error
-//        end
     @Test
-    public void raisesAnErrorIfItFailsToHeartbeat() {
-        Assert.fail("NIY"); // TODO
+    public void raisesAnErrorIfItFailsToHeartbeat() throws IOException {
+    	String jid = queue.put("Foo", null, null);
+    	try {
+    		client.jobs(jid).heartbeat();
+    		Assert.fail("Expected an exception to be raised for trying to hearbeat a non-running job");
+    	} catch (Exception e) {}
     }
 
     @Test
