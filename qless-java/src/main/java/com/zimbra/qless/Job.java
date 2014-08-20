@@ -61,7 +61,7 @@ public class Job {
     protected String jid;
     
     @JsonProperty(value="expires")
-    protected int expiresAt;
+    protected long expiresAt;
     
     @JsonProperty
     protected List<History> history;
@@ -103,6 +103,10 @@ public class Job {
         client.call("cancel", jid);
     }
     
+    public void complete() throws IOException {
+        complete(null, null);
+    }
+    
     public void complete(String nextQueue) throws IOException {
         complete(nextQueue, null);
     }
@@ -113,9 +117,7 @@ public class Job {
             @SuppressWarnings("unused")
             Object retval = client.call("complete", jid, client.workerName(), queueName, JSON.stringify(data));
         } else {
-            @SuppressWarnings("unused")
-            
-            Object retval = client.call("complete", jid, client.workerName(), queueName, JSON.stringify(data),
+            client.call("complete", jid, client.workerName(), queueName, JSON.stringify(data),
                     "next", nextQueue,
                     "delay", OptsHelper.get(opts, "delay", "0"),
                     "depends", JSON.stringify(OptsHelper.getList(opts, "depends"))
@@ -162,7 +164,7 @@ public class Job {
         return dependents;
     }
     
-    public int getExpiresAt() {
+    public long getExpiresAt() {
         return expiresAt;
     }
     
@@ -221,12 +223,16 @@ public class Job {
         return tracked;
     }
     
-    public int getTtl() {
-        return expiresAt - (int)(System.currentTimeMillis() / 1000);
+    public long getTtl() {
+        return expiresAt - System.currentTimeMillis() / 1000;
     }
     
     public String getWorkerName() {
         return workerName;
+    }
+    
+    public void heartbeat() throws IOException {
+    	expiresAt = (Long)client.call("heartbeat", jid, workerName, JSON.stringify(data));
     }
     
     public void isComplete() throws IOException {

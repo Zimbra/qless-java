@@ -120,7 +120,7 @@ public class JobTest {
         client.config().put("heartbeat", 10);
         queue.put("Foo", null, null);
         Job job = queue.pop();
-        int ttl = job.getTtl();
+        long ttl = job.getTtl();
         Assert.assertTrue(ttl >= 9 && ttl <= 10);
     }
 
@@ -187,7 +187,7 @@ public class JobTest {
     @Test
     public void canCompleteItself() throws IOException {
         String jid = queue.put("Foo", null, null);
-        queue.pop().isComplete();
+        queue.pop().complete(); // TODO: this test passes even when this line is removed
         Assert.assertEquals("complete", client.jobs(jid).getState());
     }
 
@@ -198,18 +198,15 @@ public class JobTest {
         Assert.assertEquals("waiting", client.jobs(jid).getState());
     }
 
-//        it 'can heartbeat itself' do
-//          client.config['heartbeat'] = 10
-//          queue.put('Foo', {}, jid: 'jid')
-//          job = queue.pop
-//          before = job.ttl
-//          client.config['heartbeat'] = 20
-//          job.heartbeat
-//          expect(job.ttl).to be > before
-//        end
     @Test
-    public void canHeartbeatItself() {
-        Assert.fail("NIY"); // TODO
+    public void canHeartbeatItself() throws IOException {
+    	client.config().put("heartbeat", 10);
+    	queue.put("Foo", null, null);
+    	Job job = queue.pop();
+    	long before = job.getTtl();
+    	client.config().put("heartbeat", 20);
+    	job.heartbeat();
+        Assert.assertTrue(job.getTtl() > before);
     }
 
 //        it 'raises an error if it fails to heartbeat' do
