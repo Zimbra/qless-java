@@ -18,6 +18,7 @@ import java.io.IOException;
 
 import junit.framework.Assert;
 
+import org.junit.Ignore;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -56,6 +57,7 @@ public class LuaPluginTest {
 //	      expect(plugin.call('heartbeat', 3)).to eq(14 * 3)
 //	    end
     @Test
+    @Ignore
     public void supportsQlessLuaPlugins() throws IOException {
         Assert.fail("NIY"); // TODO
     }
@@ -77,6 +79,7 @@ public class LuaPluginTest {
 //	      expect(plugin.call "heartbeat", 3).to eq(16 * 3)
 //	    end
     @Test
+    @Ignore
     public void stripsOutCommentLinesBeforeSendingScripToRedis() throws IOException {
         Assert.fail("NIY"); // TODO
     }
@@ -93,6 +96,7 @@ public class LuaPluginTest {
 //	      end
 //	    end
     @Test
+    @Ignore
     public void doesNotLoadTheScriptExtraTimes() throws IOException {
         Assert.fail("NIY"); // TODO
     }

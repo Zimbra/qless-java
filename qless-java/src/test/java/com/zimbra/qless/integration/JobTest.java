@@ -22,6 +22,7 @@ import java.util.Map;
 
 import junit.framework.Assert;
 
+import org.junit.Ignore;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -111,6 +112,7 @@ public class JobTest {
 //          expect(client.jobs['jid'].klass).to eq(Job)
 //        end
     @Test
+    @Ignore
     public void exposesItsKlass() {
         Assert.fail("NIY"); // TODO
     }
@@ -271,6 +273,7 @@ public class JobTest {
 //          expect(job.failure['group']).to eq('foo-method-missing')
 //        end
     @Test
+    @Ignore
     public void failsToProcessIfItDoesNotHaveARunnableMethod() {
         Assert.fail("NIY"); // TODO
     }
@@ -283,6 +286,7 @@ public class JobTest {
 //          expect(job.failure['group']).to eq('foo-NameError')
 //        end
     @Test
+    @Ignore
     public void raisesAnErrorIfTheKlassIsNotFound() {
         Assert.fail("NIY"); // TODO
     }
@@ -312,6 +316,7 @@ public class JobTest {
 //          expect(events).to eq([:before])
 //        end
     @Test
+    @Ignore
     public void invokesBeforeCompleteOnAnAlreadyCompletedJob() {
         Assert.fail("NIY"); // TODO
     }
@@ -337,6 +342,7 @@ public class JobTest {
 //          expect(queue.pop.spawned_from).to eq(recurring_job)
 //        end
     @Test
+    @Ignore
     public void returnsTheSourceRecurringJobFromSpawnedFrom() {
         Assert.fail("NIY"); // TODO
     }

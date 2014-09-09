@@ -19,6 +19,7 @@ import java.io.IOException;
 import junit.framework.Assert;
 
 import org.easymock.EasyMock;
+import org.junit.Ignore;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -68,6 +69,7 @@ public class LuaScriptTest {
 //	      }.to change { redis.keys.size }.by(1)
 //	    end
     @Test
+    @Ignore
     public void canIssueCommandsWithoutReloadingTheScript() throws IOException {
         Assert.fail("NIY"); // TODO
 //        // setup precondition by talking to redis directly
@@ -107,6 +109,7 @@ public class LuaScriptTest {
 //	      }.to raise_error(FooError)
 //	    end
     @Test
+    @Ignore
     public void raisesNonUserScriptErrors() throws IOException {
         Assert.fail("NIY"); // TODO
     }
