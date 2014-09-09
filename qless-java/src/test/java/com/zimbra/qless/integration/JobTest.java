@@ -349,6 +349,6 @@ public class JobTest {
     @Test
     public void returnsNullFromSpawnedFromWhenItIsNotARecurringJob() throws IOException {
         String jid = queue.put("Foo", null, null);
-        Assert.assertEquals(null, client.jobs(jid).getSpawnedFrom());
+        Assert.assertEquals("false", client.jobs(jid).getSpawnedFrom());
     }
 }
