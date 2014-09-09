@@ -44,7 +44,10 @@ public class ClientEvents implements AutoCloseable {
     ClientEvents(Client client, JedisPool jedisPool) {
         this.client = client;
         this.jedisPool = jedisPool;
-        jedis = jedisPool.getResource();
+        if (null == this.jedisPool)
+            jedis = null;
+        else
+            jedis = jedisPool.getResource();
         listenerThread = new ListenerThread(this);
         listenerThread.setDaemon(true);
         listenerThread.start();
@@ -128,13 +131,15 @@ public class ClientEvents implements AutoCloseable {
             }
             String[] channels = new String[channelList.size()];
             channelList.toArray(channels);
-            jedis.subscribe(listener, channels);
+            if (null != jedis)
+                jedis.subscribe(listener, channels);
             LOGGER.debug("Run loop ending");
             cleanup();
         }
         
         void cleanup() {
-            clientEvents.jedisPool.returnResource(clientEvents.jedis);
+            if (null != clientEvents.jedisPool)
+                clientEvents.jedisPool.returnResource(clientEvents.jedis);
         }
     }
     
