@@ -15,6 +15,8 @@
 package com.zimbra.qless;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -338,7 +340,14 @@ public class Job {
         client.call("track", "untrack", jid);
         tracked = false;
     }
-    
+
+    public void process() throws IOException, NoSuchMethodException, SecurityException, ClassNotFoundException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException {
+      System.out.println(this.klassName);
+      final Class<?> cls = Class.forName(this.klassName);
+      final Method method = cls.getMethod("test", Job.class);
+      System.out.println(method.getName());
+      method.invoke(cls.newInstance(), this);
+    }
     
     @SuppressWarnings("serial")
     public static class History extends HashMap<String,Object> {
