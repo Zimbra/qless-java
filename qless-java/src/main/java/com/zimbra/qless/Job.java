@@ -17,6 +17,7 @@ package com.zimbra.qless;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -337,16 +338,41 @@ public class Job {
     }
     
     public void untrack() throws IOException {
-        client.call("track", "untrack", jid);
+    	client.call("track", "untrack", jid);
         tracked = false;
     }
+    
+    public Class<?> getKlass() throws ClassNotFoundException
+    {
+    	return Class.forName(this.klassName);
+    }
 
-    public void process() throws IOException, NoSuchMethodException, SecurityException, ClassNotFoundException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, InstantiationException {
-      System.out.println(this.klassName);
-      final Class<?> cls = Class.forName(this.klassName);
-      final Method method = cls.getMethod("test", Job.class);
-      System.out.println(method.getName());
-      method.invoke(cls.newInstance(), this);
+    public Object process()
+    {
+    	Class<?> cls;
+		try {
+			cls = this.getKlass();
+		} catch (ClassNotFoundException e) {
+			throw new QlessException("class not found: " + this.klassName, e);
+		}
+
+		Method method;
+		try {
+			method = cls.getMethod(this.queueName, Job.class);
+		} catch (NoSuchMethodException | SecurityException e) {
+			throw new QlessException("method not found: " + this.queueName, e);
+		}
+
+    	try {
+    		if (Modifier.isStatic(method.getModifiers())) {
+    			return method.invoke(cls, this);
+    		} else {
+    			return method.invoke(cls.newInstance(), this);
+    		}
+		} catch (IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException | InstantiationException e) {
+			throw new QlessException("fail to invoke " + this.queueName, e);
+		}
     }
     
     @SuppressWarnings("serial")
