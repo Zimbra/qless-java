@@ -22,6 +22,7 @@ public class SerialWorker {
 	private int intervalInSeconds;
 	private String currentJid;
 	private Iterator queueItor;
+	private boolean shutDown = false;
 	
 	public SerialWorker(List<String> queueNameList, Client client, int intervalInSeconds)
 	{
@@ -39,31 +40,36 @@ public class SerialWorker {
 		if (this.queues.size() == 0) 
 			throw new QlessException("no queue found");
 		else 
-			queueItor = this.queues.iterator();
+			this.queueItor = this.queues.iterator();
+	}
+	
+	public void shutDown()
+	{
+		this.shutDown = true;
+		LOGGER.debug("shutdown worker");
 	}
 	
 	private Job getJob() throws IOException
 	{
-		if (null == this.queues || this.queues.size() == 0 || null == this.queueItor) {
+		if (null == this.queues || this.queues.size() == 0) {
 			return null;
 		}
 		
-		Iterator oldItor = this.queueItor;
-		while (true) {
-			Queue q = (Queue)this.queueItor;
-			Job job = q.pop();
+		int count = 0;
+		while (!this.shutDown) {
+			if ( !queueItor.hasNext()) {
+				this.queueItor = this.queues.iterator();
+			}
+			
+			Queue queue = (Queue) this.queueItor.next();
+			count ++;
+			Job job = queue.pop();
 			if (null != job) {
-				queueItor = (Iterator) queueItor.next();
 				return job;
 			}
 			
-			if (queueItor.hasNext()) {
-				queueItor = (Iterator) queueItor.next();
-				if (this.queueItor == oldItor) {
-					break;
-				}
-			} else {
-				queueItor = this.queues.iterator();
+			if (count == this.queues.size()) {
+				break;
 			}
 		}
 		
@@ -72,16 +78,17 @@ public class SerialWorker {
 	
 	public void run() throws InterruptedException, IOException
 	{
-		while (true)
+		while (!this.shutDown)
 		{
 			Job job = this.getJob();
 			if (null == job) {
 				Thread.sleep(this.intervalInSeconds * 1000);
+				LOGGER.debug("Empty Job List");
 				continue;
 			}
 			
 			this.setCurrentJid(job.getJid());
-			this.LOGGER.debug("working on %s %s", job.getJid(), job.getKlassName());
+			this.LOGGER.debug("working on " + job.getKlassName() + ":" + this.getCurrentJid());
 			job.process();
 		}
 	}

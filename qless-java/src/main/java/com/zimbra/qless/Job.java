@@ -353,6 +353,11 @@ public class Job {
 		try {
 			cls = this.getKlass();
 		} catch (ClassNotFoundException e) {
+			try {
+				this.fail("missing class", this.klassName);
+			} catch (IOException ex) {
+				throw new QlessException(ex);
+			}
 			throw new QlessException("class not found: " + this.klassName, e);
 		}
 
@@ -360,6 +365,11 @@ public class Job {
 		try {
 			method = cls.getMethod(this.queueName, Job.class);
 		} catch (NoSuchMethodException | SecurityException e) {
+			try {
+				this.fail("missing method", this.klassName + ":" + this.queueName);
+			} catch (IOException ex) {
+				throw new QlessException(ex);
+			}
 			throw new QlessException("method not found: " + this.queueName, e);
 		}
 
@@ -371,6 +381,11 @@ public class Job {
     		}
 		} catch (IllegalAccessException | IllegalArgumentException
 				| InvocationTargetException | InstantiationException e) {
+			try {
+				this.fail("broken method", this.klassName + ":" + this.queueName);
+			} catch (IOException ex) {
+				throw new QlessException(ex);
+			}
 			throw new QlessException("fail to invoke " + this.queueName, e);
 		}
     }
