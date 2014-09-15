@@ -11,6 +11,10 @@ import org.kohsuke.args4j.spi.StringArrayOptionHandler;
 import redis.clients.jedis.JedisPool;
 import com.zimbra.qless.Client;
 
+/**
+ * Add a binary wrapper to pick jobs from existing queues
+ *
+ */
 public class QlessJavaWorker {
     @Option(name = "-host", usage = "The url to connect to Redis")
     public String host = "localhost";

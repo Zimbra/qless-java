@@ -15,6 +15,10 @@ import com.zimbra.qless.Job;
 import com.zimbra.qless.QlessException;
 import com.zimbra.qless.Queue;
 
+/**
+ * A worker that just does serial work
+ *
+ */
 @SuppressWarnings("rawtypes")
 public class SerialWorker {
     final Logger LOGGER = LoggerFactory.getLogger(SerialWorker.class);

@@ -347,6 +347,11 @@ public class Job {
     	return Class.forName(this.klassName);
     }
 
+    /**
+     * Load the module containing your class, and run the appropriate method.
+     * For example, if this job was popped from the queue ``testing``, then this
+     * would invoke the ``testing`` of your class.
+     */
     public Object process() {
 	Class<?> cls;
 	try {
