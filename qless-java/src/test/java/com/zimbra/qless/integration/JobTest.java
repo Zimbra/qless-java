@@ -22,6 +22,7 @@ import java.util.Map;
 
 import junit.framework.Assert;
 
+import org.junit.Ignore;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -34,6 +35,7 @@ import redis.clients.jedis.exceptions.JedisDataException;
 import com.zimbra.qless.Client;
 import com.zimbra.qless.JSON;
 import com.zimbra.qless.Job;
+import com.zimbra.qless.QlessException;
 import com.zimbra.qless.Queue;
 
 
@@ -111,6 +113,7 @@ public class JobTest {
 //          expect(client.jobs['jid'].klass).to eq(Job)
 //        end
     @Test
+    @Ignore
     public void exposesItsKlass() {
         Assert.fail("NIY"); // TODO
     }
@@ -271,6 +274,7 @@ public class JobTest {
 //          expect(job.failure['group']).to eq('foo-method-missing')
 //        end
     @Test
+    @Ignore
     public void failsToProcessIfItDoesNotHaveARunnableMethod() {
         Assert.fail("NIY"); // TODO
     }
@@ -283,6 +287,7 @@ public class JobTest {
 //          expect(job.failure['group']).to eq('foo-NameError')
 //        end
     @Test
+    @Ignore
     public void raisesAnErrorIfTheKlassIsNotFound() {
         Assert.fail("NIY"); // TODO
     }
@@ -312,6 +317,7 @@ public class JobTest {
 //          expect(events).to eq([:before])
 //        end
     @Test
+    @Ignore
     public void invokesBeforeCompleteOnAnAlreadyCompletedJob() {
         Assert.fail("NIY"); // TODO
     }
@@ -337,6 +343,7 @@ public class JobTest {
 //          expect(queue.pop.spawned_from).to eq(recurring_job)
 //        end
     @Test
+    @Ignore
     public void returnsTheSourceRecurringJobFromSpawnedFrom() {
         Assert.fail("NIY"); // TODO
     }
@@ -349,6 +356,28 @@ public class JobTest {
     @Test
     public void returnsNullFromSpawnedFromWhenItIsNotARecurringJob() throws IOException {
         String jid = queue.put("Foo", null, null);
-        Assert.assertEquals(null, client.jobs(jid).getSpawnedFrom());
+        Assert.assertEquals("false", client.jobs(jid).getSpawnedFrom());
+    }
+
+    @Test
+    public void runJobBasic() throws IOException {
+	final Queue queue = client.queue("test");
+	queue.put("com.zimbra.qless.integration.Foo", null, null);
+	String result = (String) queue.pop().process();
+	Assert.assertEquals("com.zimbra.qless.integration.Foo.test", result);
+    }
+
+    @Test(expected = QlessException.class)
+    public void runJobMissingKlass() throws IOException {
+	final Queue queue = client.queue("test");
+	queue.put("com.zimbra.qless.integration.Foo2", null, null);
+	queue.pop().process();
+    }
+
+    @Test(expected = QlessException.class)
+    public void runJobMissingMethod() throws IOException {
+	final Queue queue = client.queue("test2");
+	queue.put("com.zimbra.qless.integration.Foo", null, null);
+	queue.pop().process();
     }
 }

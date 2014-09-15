@@ -21,6 +21,7 @@ import java.util.Map;
 
 import junit.framework.Assert;
 
+import org.junit.Ignore;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -57,6 +58,7 @@ public class RecurringJobTest {
 //          queue.recur(Job, {}, 5, jid: 'b').should eq('b')
 //        end
     @Test
+    @Ignore
     public void canTakeEitherAClassOrString() {
         Assert.fail("NIY"); // TODO
     }
@@ -151,6 +153,7 @@ public class RecurringJobTest {
 //          expect(client.jobs['jid'].next - nxt - 60).to be < 1
 //        end
     @Test
+    @Ignore
     public void exposesWhenTheNextJobWillRun() {
         Assert.fail("NIY"); // TODO
     }
@@ -184,6 +187,7 @@ public class RecurringJobTest {
 //            end
 //          end
     @Test
+    @Ignore
     public void exposesJidAndJobOfLastSpawnedJob() {
         Assert.fail("NIY"); // TODO
     }

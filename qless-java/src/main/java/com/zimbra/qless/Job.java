@@ -15,6 +15,9 @@
 package com.zimbra.qless;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -339,7 +342,60 @@ public class Job {
         tracked = false;
     }
     
-    
+    public Class<?> getKlass() throws ClassNotFoundException
+    {
+    	return Class.forName(this.klassName);
+    }
+
+    /**
+     * Load the module containing your class, and run the appropriate method.
+     * For example, if this job was popped from the queue ``testing``, then this
+     * would invoke the ``testing`` of your class.
+     */
+    public Object process() {
+	Class<?> cls;
+	try {
+	    cls = this.getKlass();
+	} catch (ClassNotFoundException e) {
+	    try {
+		this.fail("missing class", this.klassName);
+	    } catch (IOException ex) {
+		throw new QlessException(ex);
+	    }
+	    throw new QlessException("class not found: " + this.klassName, e);
+	}
+
+	Method method;
+	try {
+	    method = cls.getMethod(this.queueName, Job.class);
+	} catch (NoSuchMethodException | SecurityException e) {
+	    try {
+		this.fail("missing method", this.klassName + ":"
+			+ this.queueName);
+	    } catch (IOException ex) {
+		throw new QlessException(ex);
+	    }
+	    throw new QlessException("method not found: " + this.queueName, e);
+	}
+
+	try {
+	    if (Modifier.isStatic(method.getModifiers())) {
+		return method.invoke(cls, this);
+	    } else {
+		return method.invoke(cls.newInstance(), this);
+	    }
+	} catch (IllegalAccessException | IllegalArgumentException
+		| InvocationTargetException | InstantiationException e) {
+	    try {
+		this.fail("broken method", this.klassName + ":"
+			+ this.queueName);
+	    } catch (IOException ex) {
+		throw new QlessException(ex);
+	    }
+	    throw new QlessException("fail to invoke " + this.queueName, e);
+	}
+    }
+
     @SuppressWarnings("serial")
     public static class History extends HashMap<String,Object> {
         public Integer when() {
