@@ -338,7 +338,7 @@ public class Job {
     }
     
     public void untrack() throws IOException {
-    	client.call("track", "untrack", jid);
+        client.call("track", "untrack", jid);
         tracked = false;
     }
     
@@ -347,49 +347,50 @@ public class Job {
     	return Class.forName(this.klassName);
     }
 
-    public Object process()
-    {
-    	Class<?> cls;
-		try {
-			cls = this.getKlass();
-		} catch (ClassNotFoundException e) {
-			try {
-				this.fail("missing class", this.klassName);
-			} catch (IOException ex) {
-				throw new QlessException(ex);
-			}
-			throw new QlessException("class not found: " + this.klassName, e);
-		}
+    public Object process() {
+	Class<?> cls;
+	try {
+	    cls = this.getKlass();
+	} catch (ClassNotFoundException e) {
+	    try {
+		this.fail("missing class", this.klassName);
+	    } catch (IOException ex) {
+		throw new QlessException(ex);
+	    }
+	    throw new QlessException("class not found: " + this.klassName, e);
+	}
 
-		Method method;
-		try {
-			method = cls.getMethod(this.queueName, Job.class);
-		} catch (NoSuchMethodException | SecurityException e) {
-			try {
-				this.fail("missing method", this.klassName + ":" + this.queueName);
-			} catch (IOException ex) {
-				throw new QlessException(ex);
-			}
-			throw new QlessException("method not found: " + this.queueName, e);
-		}
+	Method method;
+	try {
+	    method = cls.getMethod(this.queueName, Job.class);
+	} catch (NoSuchMethodException | SecurityException e) {
+	    try {
+		this.fail("missing method", this.klassName + ":"
+			+ this.queueName);
+	    } catch (IOException ex) {
+		throw new QlessException(ex);
+	    }
+	    throw new QlessException("method not found: " + this.queueName, e);
+	}
 
-    	try {
-    		if (Modifier.isStatic(method.getModifiers())) {
-    			return method.invoke(cls, this);
-    		} else {
-    			return method.invoke(cls.newInstance(), this);
-    		}
-		} catch (IllegalAccessException | IllegalArgumentException
-				| InvocationTargetException | InstantiationException e) {
-			try {
-				this.fail("broken method", this.klassName + ":" + this.queueName);
-			} catch (IOException ex) {
-				throw new QlessException(ex);
-			}
-			throw new QlessException("fail to invoke " + this.queueName, e);
-		}
+	try {
+	    if (Modifier.isStatic(method.getModifiers())) {
+		return method.invoke(cls, this);
+	    } else {
+		return method.invoke(cls.newInstance(), this);
+	    }
+	} catch (IllegalAccessException | IllegalArgumentException
+		| InvocationTargetException | InstantiationException e) {
+	    try {
+		this.fail("broken method", this.klassName + ":"
+			+ this.queueName);
+	    } catch (IOException ex) {
+		throw new QlessException(ex);
+	    }
+	    throw new QlessException("fail to invoke " + this.queueName, e);
+	}
     }
-    
+
     @SuppressWarnings("serial")
     public static class History extends HashMap<String,Object> {
         public Integer when() {

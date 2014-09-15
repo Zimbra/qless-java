@@ -358,26 +358,26 @@ public class JobTest {
         String jid = queue.put("Foo", null, null);
         Assert.assertEquals("false", client.jobs(jid).getSpawnedFrom());
     }
-    
+
     @Test
     public void runJobBasic() throws IOException {
-    	final Queue queue = client.queue("test");
-        queue.put("com.zimbra.qless.integration.Foo", null, null);
-        String result = (String) queue.pop().process();
-        Assert.assertEquals("com.zimbra.qless.integration.Foo.test", result);
+	final Queue queue = client.queue("test");
+	queue.put("com.zimbra.qless.integration.Foo", null, null);
+	String result = (String) queue.pop().process();
+	Assert.assertEquals("com.zimbra.qless.integration.Foo.test", result);
     }
-    
-    @Test (expected = QlessException.class)
+
+    @Test(expected = QlessException.class)
     public void runJobMissingKlass() throws IOException {
-    	final Queue queue = client.queue("test");
-        queue.put("com.zimbra.qless.integration.Foo2", null, null);
-        queue.pop().process();
+	final Queue queue = client.queue("test");
+	queue.put("com.zimbra.qless.integration.Foo2", null, null);
+	queue.pop().process();
     }
-    
-    @Test (expected = QlessException.class)
+
+    @Test(expected = QlessException.class)
     public void runJobMissingMethod() throws IOException {
-    	final Queue queue = client.queue("test2");
-        queue.put("com.zimbra.qless.integration.Foo", null, null);
-        queue.pop().process();
+	final Queue queue = client.queue("test2");
+	queue.put("com.zimbra.qless.integration.Foo", null, null);
+	queue.pop().process();
     }
 }
