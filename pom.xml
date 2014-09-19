@@ -4,7 +4,7 @@
 	<groupId>com.zimbra.qless</groupId>
 	<artifactId>qless</artifactId>
 	<name>Zimbra Qless Queue/Pipe Management</name>
-	<version>0.1.0-SNAPSHOT</version>
+	<version>0.1.0</version>
 	<packaging>pom</packaging>
 
 
