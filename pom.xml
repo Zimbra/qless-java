@@ -4,7 +4,7 @@
 	<groupId>com.zimbra.qless</groupId>
 	<artifactId>qless</artifactId>
 	<name>Zimbra Qless Queue/Pipe Management</name>
-	<description>This is a Java-based client library for the qless Redis-backed job queue.</description>
+	<description>This is a Java-based client library for the qless Redis-backed job tracking system.</description>
 	<version>0.1.0</version>
 	<packaging>pom</packaging>
 	<licenses>
@@ -21,6 +21,7 @@
 	</scm>
 	<developers>
 		<developer>
+			<id>davidr</id>
 			<name>David Rauschenbach</name>
 			<email>drauschenbach@zimbra.com</email>
 		</developer>
