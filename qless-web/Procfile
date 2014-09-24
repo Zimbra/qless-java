@@ -1,1 +1,2 @@
 web: java $JAVA_OPTS -Dspring.profiles.active=prod -jar target/dependency/jetty-runner.jar --port $PORT target/*.war
+webdebug: java $JAVA_OPTS -Xdebug -Xrunjdwp:transport=dt_socket,address=8000,server=y,suspend=n -Dspring.profiles.active=prod -jar target/dependency/jetty-runner.jar --port $PORT target/*.war

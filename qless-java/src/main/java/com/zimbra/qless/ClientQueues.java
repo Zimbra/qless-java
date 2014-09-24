@@ -17,8 +17,11 @@ public class ClientQueues {
         this.client = client;
     }
     
-    public List<QueueCounts> counts() throws IOException {
+	public List<QueueCounts> counts() throws IOException {
         Object result = client.call("queues");
+        if ("{}".equals(result)) {
+        	return new ArrayList<QueueCounts>();
+        }
         JavaType javaType = new ObjectMapper().getTypeFactory().constructCollectionType(ArrayList.class, QueueCounts.class);
         return JSON.parse(result.toString(), javaType);
     }
