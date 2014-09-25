@@ -101,9 +101,9 @@ public class Job {
         // TODO note_state_change :complete
         if (nextQueue == null) {
             @SuppressWarnings("unused")
-            Object retval = client.call("complete", jid, client.workerName(), queueName, JSON.stringify(data));
+            Object retval = client.call("complete", jid, client.getWorkerName(), queueName, JSON.stringify(data));
         } else {
-            client.call("complete", jid, client.workerName(), queueName, JSON.stringify(data),
+            client.call("complete", jid, client.getWorkerName(), queueName, JSON.stringify(data),
                     "next", nextQueue,
                     "delay", OptsHelper.get(opts, "delay", "0"),
                     "depends", JSON.stringify(OptsHelper.getList(opts, "depends"))
@@ -131,7 +131,7 @@ public class Job {
     }
     
     public void fail(String group, String message) throws IOException {
-        client.call("fail", jid, client.workerName(), group, message, JSON.stringify(data));
+        client.call("fail", jid, client.getWorkerName(), group, message, JSON.stringify(data));
     }
     
     public Object failure(String group) {
@@ -247,7 +247,7 @@ public class Job {
     }
     
     public void requeue(String queue, Map<String,Object> opts) throws IOException {
-        client.call("requeue", client.workerName(), queue, jid, klassName,
+        client.call("requeue", client.getWorkerName(), queue, jid, klassName,
                 JSON.stringify(data),
                 OptsHelper.get(opts, "delay", "0"),
                 "priority", OptsHelper.get(opts, "priority", Integer.toString(priority)),

@@ -35,6 +35,10 @@ public class Queue {
         return name;
     }
     
+    public String getWorkerName() {
+        return client.getWorkerName();
+    }
+    
     public int heartbeat() throws IOException {
         return Integer.parseInt(client.config.get("heartbeat").toString());
     }
@@ -104,7 +108,7 @@ public class Queue {
     }
     
     public List<Job> pop(int count) throws IOException {
-        Object result = client.call("pop", name, client.workerName(), Integer.toString(count));
+        Object result = client.call("pop", name, client.getWorkerName(), Integer.toString(count));
         if ("{}".equals(result)) {
             return new ArrayList<Job>();
         }
@@ -115,7 +119,7 @@ public class Queue {
     }
     
     public String put(String klass, Object data, Map<String,Object> opts) throws IOException {
-        return (String)client.call("put", workerName(), name,
+        return (String)client.call("put", getWorkerName(), name,
                 OptsHelper.get(opts, "jid", client.generateJid()),
                 klass,
                 data == null ? "{}": JSON.stringify(data),
@@ -154,9 +158,5 @@ public class Queue {
     
     public void unpause() throws IOException {
         client.call("unpause", name);
-    }
-    
-    String workerName() {
-        return client.workerName();
     }
 }

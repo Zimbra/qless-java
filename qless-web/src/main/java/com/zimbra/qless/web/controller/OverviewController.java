@@ -81,6 +81,13 @@ public class OverviewController {
     	map.put("application_name", "Qless");
     }
     
+    @RequestMapping("/workers")
+    public String workers(Map<String, Object> map) throws IOException {
+    	setDefaults(map);
+        map.put("workers", qlessClient.getWorkers().getCounts());
+        return "workers";
+    }
+
     static List<Tab> getTabs() {
     	List<Tab> tabs = new ArrayList<Tab>();
     	tabs.add(new Tab("Queues"   , "/queues"));

@@ -24,7 +24,7 @@ public class QlessTest {
     @Test
     public void workerNameIncludesHostname() throws IOException {
         Client client = new Client(null);
-        String workerName = client.workerName();
+        String workerName = client.getWorkerName();
         String hostName = InetAddress.getLocalHost().getHostName();
         Assert.assertTrue(workerName.contains(hostName));
     }
@@ -32,7 +32,7 @@ public class QlessTest {
     @Test
     public void workerNameIncludesPid() {
         Client client = new Client(null);
-        String workerName = client.workerName();
+        String workerName = client.getWorkerName();
         String pid = ManagementFactory.getRuntimeMXBean().getName().split("@")[0];
         Assert.assertTrue(workerName.contains(pid));
     }

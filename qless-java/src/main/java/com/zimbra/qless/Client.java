@@ -22,6 +22,7 @@ public class Client {
     protected ClientEvents events;
     protected ClientJobs jobs = new ClientJobs(this);
     protected ClientQueues queues = new ClientQueues(this);
+    protected ClientWorkers workers = new ClientWorkers(this);
 
     public Client(JedisPool jedisPool) {
         this.jedisPool = jedisPool;
@@ -75,6 +76,14 @@ public class Client {
         return UUID.randomUUID().toString().replaceAll("-", "");
     }
     
+    public String getWorkerName() {
+        return hostname() + "-" + pid();
+    }
+    
+    public ClientWorkers getWorkers() throws IOException {
+        return workers;
+    }
+    
     protected String hostname() {
         try {
             return InetAddress.getLocalHost().getHostName();
@@ -101,9 +110,5 @@ public class Client {
     
     public ClientQueues queues() throws IOException {
         return queues;
-    }
-    
-    public String workerName() {
-        return hostname() + "-" + pid();
     }
 }
