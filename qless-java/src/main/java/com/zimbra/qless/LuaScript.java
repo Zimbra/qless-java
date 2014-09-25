@@ -1,6 +1,7 @@
 package com.zimbra.qless;
 
 import java.io.IOException;
+import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.List;
 
@@ -35,7 +36,7 @@ public class LuaScript {
     
     byte[] scriptContents() throws IOException {
         if (scriptContents == null) {
-            scriptContents = Resources.toByteArray(Resources.getResource(SCRIPT));
+            scriptContents = Resources.toByteArray(getClass().getClassLoader().getResource(SCRIPT));
         }
         return scriptContents;
     }
