@@ -1,7 +1,6 @@
 package com.zimbra.qless;
 
 import java.io.IOException;
-import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.List;
 

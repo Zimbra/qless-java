@@ -221,8 +221,8 @@ public class Job {
     	expiresAt = (Long)client.call("heartbeat", jid, workerName, JSON.stringify(data));
     }
     
-    public void isComplete() throws IOException {
-        complete(null);
+    public boolean isComplete() throws IOException {
+        return "complete".equals(state);
     }
     
     public boolean isRecurring() {
