@@ -30,10 +30,12 @@ public class ClientEvents implements AutoCloseable {
     ClientEvents(QlessClient client, JedisPool jedisPool) {
         this.client = client;
         this.jedisPool = jedisPool;
-        jedis = jedisPool.getResource();
-        listenerThread = new ListenerThread(this);
-        listenerThread.setDaemon(true);
-        listenerThread.start();
+        if (jedisPool != null) {
+	        jedis = jedisPool.getResource();
+	        listenerThread = new ListenerThread(this);
+	        listenerThread.setDaemon(true);
+	        listenerThread.start();
+        }
     }
     
     public void close() throws IOException {
