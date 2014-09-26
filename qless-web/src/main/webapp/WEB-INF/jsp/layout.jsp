@@ -16,6 +16,7 @@
     <link href="/css/jquery.noty.css" rel="stylesheet">
     <link href="/css/noty_theme_twitter.css" rel="stylesheet">
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+    <script src="/js/moment.min.js"></script>
 
     <style type="text/css">
     body {

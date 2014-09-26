@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<taglib>
+  <tlibversion>1.0</tlibversion>
+  <jspversion>1.1</jspversion>
+  <shortname>format</shortname>
+  <info>Moment.js taglib</info>
+  <uri></uri>
+  <tag>
+    <name>format</name>
+    <tagclass>com.zimbra.qless.web.taglib.MomentFormatTagHandler
+    </tagclass>
+    <info>Moment.js ::format().</info>
+    <attribute>
+      <name>value</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>format</name>
+      <required>false</required>
+    </attribute>
+    <attribute>
+      <name>unix</name>
+      <required>false</required>
+    </attribute>
+  </tag>
+  <tag>
+    <name>fromNow</name>
+    <tagclass>com.zimbra.qless.web.taglib.MomentFromNowTagHandler
+    </tagclass>
+    <info>Moment.js ::fromNow().</info>
+    <attribute>
+      <name>value</name>
+      <required>false</required>
+      <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+      <name>unix</name>
+      <required>false</required>
+    </attribute>
+  </tag>
+</taglib> 

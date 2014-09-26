@@ -1,5 +1,6 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="c"      uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt"    uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="moment" uri="/WEB-INF/MomentTagDescriptor.tld" %>
 
 <div class="row" id="job-${job.jid}">
   <div class="span12">
@@ -118,31 +119,30 @@
       <div class="span6">
         <h3><small>History</small></h3>
         <div style="overflow-y:scroll; height: 200px">
-          <!-- job.queue_history.reverse.each do |h| -->
           <c:forEach items="${job.history}" var="h">
           <c:if test="h.what == 'put'">
-          	<pre><strong>${h.what}</strong> at ${h.when} in queue <strong>${h.q}</strong></pre>
+          	<pre><strong>${h.what}</strong> <moment:fromNow value="${h.when}" unix="true"/> in queue <strong>${h.q}</strong></pre>
           </c:if>
           <c:if test="h.what == 'popped'">
-          	<pre><strong>${h.what}</strong> at ${h.when} by <strong>${h.worker}</strong></pre>
+          	<pre><strong>${h.what}</strong> <moment:fromNow value="${h.when}" unix="true"/> by <strong>${h.worker}</strong></pre>
           </c:if>
           <c:if test="h.what == 'done'">
-          	<pre><strong>completed</strong> at ${h.when}</pre>
+          	<pre><strong>completed</strong> <moment:fromNow value="${h.when}" unix="true"/></pre>
           </c:if>
           <c:choose>
           <c:when test="h.what == 'failed'">
             <c:choose>
           	<c:when test="choose">
-          	  <pre><strong>${h.what}</strong> at ${h.when}
+          	  <pre><strong>${h.what}</strong> <moment:fromNow value="${h.when}" unix="true"/>
           	  by <strong>${h.worker}</strong> in group <strong>${h.group}</strong></pre>
           	</c:when>
           	<c:otherwise>
-          	  <pre><strong>${h.what}</strong> at ${h.when} in group <strong>${h.group}</strong></pre>
+          	  <pre><strong>${h.what}</strong> <moment:fromNow value="${h.when}" unix="true"/> in group <strong>${h.group}</strong></pre>
           	</c:otherwise>
           	</c:choose>
           </c:when>
           <c:otherwise>
-          	<pre><strong>${h.what}</strong> at ${h.when}</pre>
+          	<pre><strong>X ${h.what}</strong> <moment:fromNow value="${h.when}" unix="true"/></pre>
           </c:otherwise>
           </c:choose>
           </c:forEach>
@@ -156,7 +156,7 @@
       <div class="span12">
         <div class="alert alert-error">
           <p>In <strong>${job.queueName}</strong> on <strong>${job.failure.worker}</strong>
-            about <!-- strftime(Time.at(job.failure['when'])) -->${job.failure.when}</p>
+            <moment:fromNow value="${h.when}" unix="true"/></p>
           <pre>${job.failure.message}</pre>
         </div>
       </div>
