@@ -80,6 +80,10 @@
     /* This just sets a few options that we use */
     var _ajax = function(obj) {
       $.ajax({
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
         url: obj.url,
         type: 'POST',
         dataType: 'json',
@@ -219,7 +223,7 @@
       // The button group of the 'add tag' bit
       var group =
       _ajax({
-        url: 'tag',
+        url: '/tag',
         data: data,
         success : function() {
           var div  = $('<div>').attr('class', 'btn-group').attr('style', 'float:left');
@@ -243,7 +247,7 @@
       // The button group of the 'add tag' bit
       var group =
       _ajax({
-        url: 'untag',
+        url: '/untag',
         data: data,
         success : function() {
           $("#job-" + jid).find('.tag').filter(function() {
