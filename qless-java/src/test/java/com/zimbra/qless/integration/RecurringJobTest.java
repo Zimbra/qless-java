@@ -56,7 +56,7 @@ public class RecurringJobTest {
         opts.put("tags", Arrays.asList("foo"));
         opts.put("retries", "3");
         String jid = queue.recur("Foo", data, 60, opts);
-        RecurringJob job = (RecurringJob)client.jobs(jid);
+        RecurringJob job = (RecurringJob)client.getJob(jid);
         Assert.assertEquals("jid", job.getJid());
         Assert.assertNotNull(job.getData());
         Assert.assertTrue(job.getData() instanceof Map);
@@ -74,14 +74,14 @@ public class RecurringJobTest {
     @Test
     public void canSetItsPriority() throws IOException {
         String jid = queue.recur("Foo", null, 60, null);
-        client.jobs(jid).priority(10);
-        Assert.assertEquals(10, client.jobs(jid).getPriority());
+        client.getJob(jid).priority(10);
+        Assert.assertEquals(10, client.getJob(jid).getPriority());
     }
 
     @Test
     public void canSetItsRetries() throws IOException {
         String jid = queue.recur("Foo", null, 60, null);
-        RecurringJob job = (RecurringJob)client.jobs(jid);
+        RecurringJob job = (RecurringJob)client.getJob(jid);
         job.retries(5);
         Assert.assertEquals(5, job.retries());
     }
@@ -89,7 +89,7 @@ public class RecurringJobTest {
     @Test
     public void canSetItsInterval() throws IOException {
         String jid = queue.recur("Foo", null, 60, null);
-        RecurringJob job = (RecurringJob)client.jobs(jid);
+        RecurringJob job = (RecurringJob)client.getJob(jid);
         job.interval(10);
         Assert.assertEquals(10, job.interval());
     }
@@ -97,7 +97,7 @@ public class RecurringJobTest {
     @Test
     public void canSetItsData() throws IOException {
         String jid = queue.recur("Foo", null, 60, null);
-        RecurringJob job = (RecurringJob)client.jobs(jid);
+        RecurringJob job = (RecurringJob)client.getJob(jid);
         job.data("foo", "bar");
         Assert.assertEquals("bar", job.data("foo"));
     }
@@ -105,28 +105,28 @@ public class RecurringJobTest {
     @Test
     public void canSetItsKlass() throws IOException {
         String jid = queue.recur("Foo", null, 60, null);
-        RecurringJob job = (RecurringJob)client.jobs(jid);
+        RecurringJob job = (RecurringJob)client.getJob(jid);
         job.klass("Foo");
         Assert.assertEquals("Foo", job.getKlassName());
-        Assert.assertEquals("Foo", client.jobs(jid).getKlassName());
+        Assert.assertEquals("Foo", client.getJob(jid).getKlassName());
     }
 
     @Test
     public void canSetItsQueue() throws IOException {
         String jid = queue.recur("Foo", null, 60, null);
-        RecurringJob job = (RecurringJob)client.jobs(jid);
+        RecurringJob job = (RecurringJob)client.getJob(jid);
         job.requeue("bar");
         Assert.assertEquals("bar", job.getQueueName());
-        Assert.assertEquals("bar", client.jobs(jid).getQueueName());
+        Assert.assertEquals("bar", client.getJob(jid).getQueueName());
     }
 
     @Test
     public void canSetItsBacklog() throws IOException {
         String jid = queue.recur("Foo", null, 60, null);
-        RecurringJob job = (RecurringJob)client.jobs(jid);
+        RecurringJob job = (RecurringJob)client.getJob(jid);
         job.backlog(1);
         Assert.assertEquals(1, job.backlog());
-        Assert.assertEquals(1, ((RecurringJob)client.jobs(jid)).backlog());
+        Assert.assertEquals(1, ((RecurringJob)client.getJob(jid)).backlog());
     }
 
 //        it 'exposes when the next job will run' do
@@ -144,18 +144,18 @@ public class RecurringJobTest {
     @Test
     public void canCancelItself() throws IOException {
         String jid = queue.recur("Foo", null, 60, null);
-        client.jobs(jid).cancel();
-        Assert.assertEquals(null, client.jobs(jid));
+        client.getJob(jid).cancel();
+        Assert.assertEquals(null, client.getJob(jid));
     }
 
     @Test
     public void canSetItsTags() throws IOException {
         String jid = queue.recur("Foo", null, 60, null);
-        client.jobs(jid).tag("foo");
-        Assert.assertEquals("foo", client.jobs(jid).getTags().get(0));
-        client.jobs(jid).untag("foo");
-        Assert.assertEquals(0, client.jobs(jid).getTags().size());
-        Assert.assertEquals("[]", JSON.stringify(client.jobs(jid).getTags()));
+        client.getJob(jid).tag("foo");
+        Assert.assertEquals("foo", client.getJob(jid).getTags().get(0));
+        client.getJob(jid).untag("foo");
+        Assert.assertEquals(0, client.getJob(jid).getTags().size());
+        Assert.assertEquals("[]", JSON.stringify(client.getJob(jid).getTags()));
     }
 
 //        describe 'last spawned job access' do
@@ -177,7 +177,7 @@ public class RecurringJobTest {
     @Test
     public void lastSpawnedJobReturnsNullIfNoJobHasEverBeenSpawned() throws IOException {
         String jid = queue.recur("Foo", null, 60, null);
-        Assert.assertEquals(null, ((RecurringJob)client.jobs(jid)).lastSpawnedJid());
-        Assert.assertEquals(null, ((RecurringJob)client.jobs(jid)).lastSpawnedJob());
+        Assert.assertEquals(null, ((RecurringJob)client.getJob(jid)).lastSpawnedJid());
+        Assert.assertEquals(null, ((RecurringJob)client.getJob(jid)).lastSpawnedJob());
     }
 }

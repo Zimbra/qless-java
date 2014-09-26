@@ -34,8 +34,8 @@ public class EventsTest {
         jedis.flushDB();
         
         queue = client.queue("foo");
-        untracked = client.jobs(queue.put("Foo", null, null));
-        tracked = client.jobs(queue.put("Bar", null, null));
+        untracked = client.getJob(queue.put("Foo", null, null));
+        tracked = client.getJob(queue.put("Bar", null, null));
         tracked.track();
     }
     

@@ -85,7 +85,7 @@ public class RecurringJob extends Job {
         if (neverSpawned()) {
             return null;
         }
-        return client.jobs(lastSpawnedJid());
+        return client.getJob(lastSpawnedJid());
     }
     
     public void move(String queue) throws IOException {

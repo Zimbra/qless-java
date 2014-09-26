@@ -76,6 +76,10 @@ public class Client {
         return UUID.randomUUID().toString().replaceAll("-", "");
     }
     
+    public Job getJob(String jid) throws IOException {
+        return jobs.get(jid);
+    }
+    
     public String getWorkerName() {
         return hostname() + "-" + pid();
     }
@@ -89,10 +93,6 @@ public class Client {
             return InetAddress.getLocalHost().getHostName();
         } catch (Exception e) {}
         return "localhost";
-    }
-    
-    public Job jobs(String jid) throws IOException {
-        return jobs.get(jid);
     }
     
     protected String now() {
