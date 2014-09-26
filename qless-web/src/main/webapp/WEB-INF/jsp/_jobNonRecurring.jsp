@@ -142,7 +142,7 @@
           	</c:choose>
           </c:when>
           <c:otherwise>
-          	<pre><strong>X ${h.what}</strong> <moment:fromNow value="${h.when}" unix="true"/></pre>
+          	<pre><strong>${h.what}</strong> <moment:fromNow value="${h.when}" unix="true"/></pre>
           </c:otherwise>
           </c:choose>
           </c:forEach>
