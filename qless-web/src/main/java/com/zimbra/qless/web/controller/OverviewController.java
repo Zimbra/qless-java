@@ -12,7 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.zimbra.qless.Client;
+import com.zimbra.qless.QlessClient;
 import com.zimbra.qless.JSON;
 import com.zimbra.qless.Queue;
 import com.zimbra.qless.WorkerJobs;
@@ -23,7 +23,7 @@ public class OverviewController {
     final Logger LOGGER = LoggerFactory.getLogger(OverviewController.class);
 
     @Autowired
-    private Client qlessClient;
+    private QlessClient qlessClient;
 
     @RequestMapping("/")
     public String overview(Map<String, Object> map) throws IOException {

@@ -19,7 +19,7 @@ import com.google.common.collect.Multimap;
 public class ClientEvents implements AutoCloseable {
     static final String[] CHANNELS = {"canceled", "completed", "failed", "popped", "put", "stalled", "track", "untrack"};
     final Logger LOGGER = LoggerFactory.getLogger(ClientEvents.class);
-    protected Client client;
+    protected QlessClient client;
     protected JedisPool jedisPool;
     protected Jedis jedis;
     protected Listener listener = new Listener();
@@ -27,7 +27,7 @@ public class ClientEvents implements AutoCloseable {
     protected Multimap<String, QlessEventListener> listenersByChannel = ArrayListMultimap.create(); 
 
     /** Constructor */
-    ClientEvents(Client client, JedisPool jedisPool) {
+    ClientEvents(QlessClient client, JedisPool jedisPool) {
         this.client = client;
         this.jedisPool = jedisPool;
         jedis = jedisPool.getResource();

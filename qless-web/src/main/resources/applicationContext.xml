@@ -50,7 +50,7 @@
             <!-- constructor-arg ref="redisUrl"/ -->
             <constructor-arg value="localhost"/>
         </bean>
-        <bean id="qlessClient" class="com.zimbra.qless.Client">
+        <bean id="qlessClient" class="com.zimbra.qless.QlessClient">
             <constructor-arg ref="jedisPool"/>
         </bean>
     </beans>

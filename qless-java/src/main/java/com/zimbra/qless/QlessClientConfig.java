@@ -10,11 +10,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-public class ClientConfig {
-    final Logger LOGGER = LoggerFactory.getLogger(ClientConfig.class);
-    Client client;
+public class QlessClientConfig {
+    final Logger LOGGER = LoggerFactory.getLogger(QlessClientConfig.class);
+    QlessClient client;
 
-    public ClientConfig(Client client) {
+    public QlessClientConfig(QlessClient client) {
         this.client = client;
     }
     

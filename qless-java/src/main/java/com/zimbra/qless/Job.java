@@ -19,7 +19,7 @@ import com.zimbra.qless.map.LuaStringArrayDeserializer;
 
 public class Job {
     @JsonIgnore @JacksonInject
-    protected transient Client client;
+    protected transient QlessClient client;
     
     @JsonIgnore
     protected transient Queue queue;
@@ -81,7 +81,7 @@ public class Job {
     
     
     @JsonCreator
-    Job(@JacksonInject("client") Client client) {
+    Job(@JacksonInject("client") QlessClient client) {
         this.client = client;
     }
     

@@ -10,7 +10,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.zimbra.qless.Client;
+import com.zimbra.qless.QlessClient;
 
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
@@ -19,12 +19,12 @@ import redis.clients.jedis.JedisPool;
 public class ConfigTest {
     final Logger LOGGER = LoggerFactory.getLogger(ConfigTest.class);
     JedisPool jedisPool = new JedisPool("localhost");
-    Client client;
+    QlessClient client;
     
     @Before
     public void before() throws IOException {
         Jedis jedis = jedisPool.getResource();
-        client = new Client(jedisPool);
+        client = new QlessClient(jedisPool);
         jedis.flushDB();
     }
     

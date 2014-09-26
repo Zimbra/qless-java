@@ -17,7 +17,7 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.exceptions.JedisDataException;
 
-import com.zimbra.qless.Client;
+import com.zimbra.qless.QlessClient;
 import com.zimbra.qless.JSON;
 import com.zimbra.qless.Job;
 import com.zimbra.qless.Queue;
@@ -26,13 +26,13 @@ import com.zimbra.qless.Queue;
 public class JobTest {
     final Logger LOGGER = LoggerFactory.getLogger(JobTest.class);
     JedisPool jedisPool = new JedisPool("localhost");
-    Client client;
+    QlessClient client;
     Queue queue;
     
     @Before
     public void before() throws IOException {
         Jedis jedis = jedisPool.getResource();
-        client = new Client(jedisPool);
+        client = new QlessClient(jedisPool);
         jedis.flushDB();
         queue = client.queue("foo");
     }

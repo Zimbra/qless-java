@@ -12,7 +12,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.zimbra.qless.Client;
+import com.zimbra.qless.QlessClient;
 import com.zimbra.qless.JSON;
 import com.zimbra.qless.Queue;
 import com.zimbra.qless.RecurringJob;
@@ -24,13 +24,13 @@ import redis.clients.jedis.JedisPool;
 public class RecurringJobTest {
     final Logger LOGGER = LoggerFactory.getLogger(RecurringJobTest.class);
     JedisPool jedisPool = new JedisPool("localhost");
-    Client client;
+    QlessClient client;
     Queue queue;
     
     @Before
     public void before() throws IOException {
         Jedis jedis = jedisPool.getResource();
-        client = new Client(jedisPool);
+        client = new QlessClient(jedisPool);
         jedis.flushDB();
         queue = client.queue("foo");
     }

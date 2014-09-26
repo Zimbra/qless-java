@@ -14,7 +14,7 @@ import redis.clients.jedis.JedisPool;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
-import com.zimbra.qless.Client;
+import com.zimbra.qless.QlessClient;
 import com.zimbra.qless.ClientEvents.QlessEventListener;
 import com.zimbra.qless.Job;
 import com.zimbra.qless.Queue;
@@ -23,14 +23,14 @@ import com.zimbra.qless.Queue;
 public class EventsTest {
     final Logger LOGGER = LoggerFactory.getLogger(EventsTest.class);
     JedisPool jedisPool = new JedisPool("localhost");
-    Client client;
+    QlessClient client;
     Queue queue;
     Job untracked, tracked;
     
     @Before
     public void before() throws IOException {
         Jedis jedis = jedisPool.getResource();
-        client = new Client(jedisPool);
+        client = new QlessClient(jedisPool);
         jedis.flushDB();
         
         queue = client.queue("foo");

@@ -17,12 +17,12 @@ import redis.clients.jedis.JedisPool;
 public class QueueTest {
     final Logger LOGGER = LoggerFactory.getLogger(QueueTest.class);
     JedisPool jedisPool = new JedisPool("localhost");
-    Client client;
+    QlessClient client;
     
     @Before
     public void before() throws IOException {
         Jedis jedis = jedisPool.getResource();
-        client = new Client(jedisPool);
+        client = new QlessClient(jedisPool);
         try {
             jedis.flushDB();
         } finally {

@@ -16,11 +16,11 @@ import redis.clients.jedis.Transaction;
 
 
 public class Queue {
-    protected Client client;
+    protected QlessClient client;
     protected String name;
 
     /** Constructor */
-    Queue(String name, Client client) {
+    Queue(String name, QlessClient client) {
         this.name = name;
         this.client = client;
     }

@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
-import com.zimbra.qless.Client;
+import com.zimbra.qless.QlessClient;
 import com.zimbra.qless.ClientQueues;
 import com.zimbra.qless.Queue;
 import com.zimbra.qless.QueueCounts;
@@ -22,7 +22,7 @@ import com.zimbra.qless.QueueCounts;
 public class QueuesTest {
     final Logger LOGGER = LoggerFactory.getLogger(QueuesTest.class);
     JedisPool jedisPool = new JedisPool("localhost");
-    Client client;
+    QlessClient client;
     
     @Before
     public void before() throws IOException {
@@ -32,7 +32,7 @@ public class QueuesTest {
         } finally {
             jedisPool.returnResource(jedis);
         }
-        client = new Client(jedisPool);
+        client = new QlessClient(jedisPool);
     }
     
     @Test

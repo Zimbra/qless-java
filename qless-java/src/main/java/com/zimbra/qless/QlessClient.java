@@ -17,15 +17,15 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
 
-public class Client {
-    final Logger LOGGER = LoggerFactory.getLogger(Client.class);
+public class QlessClient {
+    final Logger LOGGER = LoggerFactory.getLogger(QlessClient.class);
     protected JedisPool jedisPool;
     protected LuaScript luaScript;
-    protected ClientConfig config = new ClientConfig(this);
+    protected QlessClientConfig config = new QlessClientConfig(this);
     protected ClientEvents events;
     protected ClientQueues queues = new ClientQueues(this);
 
-    public Client(JedisPool jedisPool) {
+    public QlessClient(JedisPool jedisPool) {
         this.jedisPool = jedisPool;
         this.luaScript = new LuaScript(jedisPool);
         events = new ClientEvents(this, jedisPool);
@@ -65,7 +65,7 @@ public class Client {
         }
     }
     
-    public ClientConfig config() {
+    public QlessClientConfig config() {
         return config;
     }
     

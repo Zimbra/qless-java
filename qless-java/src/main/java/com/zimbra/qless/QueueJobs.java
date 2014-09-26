@@ -6,11 +6,11 @@ import java.util.List;
 
 
 public class QueueJobs {
-    protected Client client;
+    protected QlessClient client;
     protected String queueName;
 
     /** Constructor */
-    QueueJobs(String queueName, Client client) {
+    QueueJobs(String queueName, QlessClient client) {
         this.queueName = queueName;
         this.client = client;
     }

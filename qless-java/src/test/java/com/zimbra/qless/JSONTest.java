@@ -20,7 +20,7 @@ public class JSONTest {
     @Test
     public void testParseGetResponse1() throws IOException {
         String json = Resources.toString(Resources.getResource(JSONTest.class, "getResponse1.json"), Charset.defaultCharset());
-        InjectableValues injectables = new InjectableValues.Std().addValue("client", EasyMock.createNiceMock(Client.class));
+        InjectableValues injectables = new InjectableValues.Std().addValue("client", EasyMock.createNiceMock(QlessClient.class));
         Job job = JSON.parse(json, Job.class, injectables);
         
         Assert.assertEquals("77687e485b0442c6b043c52620bac347", job.jid);
@@ -55,7 +55,7 @@ public class JSONTest {
     @Test
     public void testParsePopResponse1() throws IOException {
         String json = Resources.toString(Resources.getResource(JSONTest.class, "popResponse1.json"), Charset.defaultCharset());
-        InjectableValues injectables = new InjectableValues.Std().addValue("client", EasyMock.createNiceMock(Client.class));
+        InjectableValues injectables = new InjectableValues.Std().addValue("client", EasyMock.createNiceMock(QlessClient.class));
         JavaType javaType = new ObjectMapper().getTypeFactory().constructCollectionType(ArrayList.class, Job.class);
         List<Job> jobs = JSON.parse(json, javaType, injectables);
         Assert.assertNotNull(jobs);

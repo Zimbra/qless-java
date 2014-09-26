@@ -25,7 +25,7 @@ public class RecurringJob extends Job {
 
     
     @JsonCreator
-    RecurringJob(@JacksonInject("client") Client client) {
+    RecurringJob(@JacksonInject("client") QlessClient client) {
         super(client);
     }
     

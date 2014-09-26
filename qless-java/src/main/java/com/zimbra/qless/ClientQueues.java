@@ -10,10 +10,10 @@ import org.codehaus.jackson.type.JavaType;
 
 
 public class ClientQueues {
-    protected Client client;
+    protected QlessClient client;
 
     /** Constructor */
-    ClientQueues(Client client) {
+    ClientQueues(QlessClient client) {
         this.client = client;
     }
     
