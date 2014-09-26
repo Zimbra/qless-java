@@ -10,7 +10,7 @@
 <c:forEach items="${workers}" var="worker">
 <div class="row">
   <div class="span4">
-    <h3><a href="/workers/<c:url value="${worker.name}"/>">${worker.name}</a></h3>
+    <h3><a href="/workers/<c:url value="${worker.name}/"/>">${worker.name}</a></h3>
   </div>
   <div class="span8">
     <h3> |

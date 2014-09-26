@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.zimbra.qless.Client;
 import com.zimbra.qless.JSON;
 import com.zimbra.qless.Queue;
+import com.zimbra.qless.WorkerJobs;
 import com.zimbra.qless.web.viewmodel.Tab;
 
 @Controller
@@ -84,10 +85,21 @@ public class OverviewController {
     @RequestMapping("/workers")
     public String workers(Map<String, Object> map) throws IOException {
     	setDefaults(map);
-        map.put("workers", qlessClient.getWorkers().getCounts());
+        map.put("workers", qlessClient.getWorkerCounts());
         return "workers";
     }
 
+    @RequestMapping(value="/workers/{worker}/")
+    public String worker(@PathVariable("worker") String worker, Map<String, Object> map) throws Exception {
+    	setDefaults(map);
+        map.put("name", worker);
+        WorkerJobs workerJobs = qlessClient.getWorkerJobs(worker);
+        map.put("workerJobs", workerJobs);
+        map.put("running", qlessClient.getJobs(workerJobs.getJobs().toArray(new String[workerJobs.getJobs().size()])));
+        map.put("stalled", qlessClient.getJobs(workerJobs.getStalled().toArray(new String[workerJobs.getStalled().size()])));
+        return "worker";
+    }
+    
     static List<Tab> getTabs() {
     	List<Tab> tabs = new ArrayList<Tab>();
     	tabs.add(new Tab("Queues"   , "/queues"));

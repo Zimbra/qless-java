@@ -15,6 +15,7 @@ import redis.clients.jedis.JedisPool;
 import com.zimbra.qless.Client;
 import com.zimbra.qless.Queue;
 import com.zimbra.qless.WorkerCounts;
+import com.zimbra.qless.WorkerJobs;
 
 
 public class WorkersTest {
@@ -35,37 +36,33 @@ public class WorkersTest {
         queue = client.queue("foo");
     }
     
-//    it 'provides access to worker stats' do
-//        # Put the job, there should be no workers
-//        queue.put('Foo', {}, jid: 'jid')
-//        expect(client.workers.counts).to eq({})
-//
-//        # Pop a job and we have some information
-//        queue.pop
-//        expect(client.workers.counts).to eq([{
-//          'name'    => queue.worker_name,
-//          'jobs'    => 1,
-//          'stalled' => 0
-//        }])
-//        expect(client.workers[queue.worker_name]).to eq({
-//          'jobs'    => ['jid'],
-//          'stalled' => {}
-//        })
-//      end
     @Test
     public void providesAccessToWorkerListStats() throws IOException {
     	// Put the job, there should be no workers
         queue.put("Foo", null, null);
-        Assert.assertEquals(0, client.getWorkers().getCounts().size());
+        Assert.assertEquals(0, client.getWorkerCounts().size());
         // Pop a job and we have some information
         queue.pop();
-        List<WorkerCounts> workerCounts = client.getWorkers().getCounts();
+        List<WorkerCounts> workerCounts = client.getWorkerCounts();
         Assert.assertEquals(1, workerCounts.size());
         Assert.assertEquals(queue.getWorkerName(), workerCounts.get(0).getName());
         Assert.assertEquals(1, workerCounts.get(0).getJobs());
         Assert.assertEquals(0, workerCounts.get(0).getStalled());
     }
 
+    @Test
+    public void providesAccessToWorkerJobs() throws IOException {
+    	// Put the job, there should be no workers
+        String jid = queue.put("Foo", null, null);
+        Assert.assertEquals(0, client.getWorkerCounts().size());
+        // Pop a job and we have some information
+        queue.pop();
+        WorkerJobs workerJobs = client.getWorkerJobs(queue.getWorkerName());
+        Assert.assertEquals(1, workerJobs.getJobs().size());
+        Assert.assertEquals(jid, workerJobs.getJobs().get(0));
+        Assert.assertEquals(0, workerJobs.getStalled().size());
+    }
+    
 //      it 'can deregister workers' do
 //        # Ensure there's a worker listed
 //        queue.put('Foo', {}, jid: 'jid')
