@@ -39,6 +39,14 @@ public class MainController {
         return "about";
     }
     
+    @RequestMapping("/completed")
+    public String completed(Map<String, Object> map) throws IOException {
+    	setDefaults(map);
+    	List<String> jids = qlessClient.getJobsComplete();
+        map.put("jobs", qlessClient.getJobs(jids.toArray(new String[jids.size()])));
+        return "completed";
+    }
+
     @RequestMapping("/config")
     public String config(Map<String, Object> map) throws IOException {
     	setDefaults(map);

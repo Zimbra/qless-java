@@ -106,6 +106,18 @@ public class QlessClient {
         return JSON.parse(result.toString(), javaType, inject);
     }
     
+    public List<String> getJobsComplete() throws IOException {
+    	return getJobsComplete(0, 25);
+    }
+    
+    public List<String> getJobsComplete(int offset, int count) throws IOException {
+        Object result = call("jobs", "complete", Integer.toString(offset), Integer.toString(count));
+        if ("{}".equals(result.toString())) {
+        	return new ArrayList<String>();
+        }
+        return (ArrayList<String>)result;
+    }
+    
 	public List<WorkerCounts> getWorkerCounts() throws IOException {
         Object result = call("workers");
         if ("{}".equals(result)) {
