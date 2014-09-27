@@ -268,7 +268,7 @@
         var data = {};
         data[jid] = priority;
         _ajax({
-          url: 'priority',
+          url: '/priority',
           data: data,
           success : function(data) {
             if (data[jid] != 'failed' && data[jid] != null) {
