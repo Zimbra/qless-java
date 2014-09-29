@@ -6,11 +6,11 @@
   <name>Zimbra Qless Queue/Pipe Management - Web UI</name>
   <description>This is a Java-based Web UI for the qless Redis-backed job tracking system.</description>
   <packaging>war</packaging>
-  <version>0.2.0-SNAPSHOT</version>
+  <version>0.2.0</version>
   <parent>
     <groupId>com.zimbra.qless</groupId>
     <artifactId>qless</artifactId>
-    <version>0.2.0-SNAPSHOT</version>
+    <version>0.2.0</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
   <properties>
