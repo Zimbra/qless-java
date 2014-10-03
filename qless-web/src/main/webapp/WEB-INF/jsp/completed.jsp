@@ -6,7 +6,7 @@
 
 
 <c:choose>
-<c:when test="${fn.length(jobs) == 0}">
+<c:when test="${empty jobs}">
   <div class="page-header">
     <h1>No Completed Jobs<small>(yet)</small></h1>
   </div>

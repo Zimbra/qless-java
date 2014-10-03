@@ -30,6 +30,7 @@ public class MainController {
     public String overview(Map<String, Object> map) throws IOException {
     	setDefaults(map);
         map.put("queues", qlessClient.queues().counts());
+        map.put("workers", qlessClient.getWorkerCounts());
         return "overview";
     }
 
