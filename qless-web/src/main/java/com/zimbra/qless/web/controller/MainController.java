@@ -5,12 +5,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.zimbra.qless.JSON;
 import com.zimbra.qless.Job;
@@ -64,6 +69,25 @@ public class MainController {
         return "job";
     }
 
+    @RequestMapping(value="/move", method=RequestMethod.POST, headers={"Content-Type=application/json"})
+    @ResponseBody
+    public Map<String,String> move(@RequestBody Map<String,String> body, HttpServletResponse res) {
+        // Expects a JSON-encoded hash of id: jid and queue: queue_name
+		String jid = body.get("id");
+		String queueName = body.get("queue");
+		try {
+    		Job job = qlessClient.getJob(jid);
+    		if (job == null) {
+    			res.setStatus(404);
+    			return null;
+    		}
+    		job.requeue(queueName);
+		} catch (IOException e) {
+			res.setStatus(500);
+		}
+       	return body;
+    }
+    
     @RequestMapping("/queues")
     public String queues(Map<String, Object> map) throws IOException {
     	setDefaults(map);
@@ -81,6 +105,7 @@ public class MainController {
     	setDefaults(map);
     	Queue q = qlessClient.queue(queue);
     	Map<String,Object> stats = q.stats();
+        map.put("queues", qlessClient.queues().counts());
         map.put("queue", q);
         map.put("counts", q.counts());
         map.put("stats", stats);

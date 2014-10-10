@@ -98,7 +98,7 @@
      * flash a message to that effect on the page */
     var move = function(jid, queue, cb) {
       _ajax({
-        url: 'move',
+        url: '/move',
         data: {id:jid, queue:queue},
         success: function() { flash('Moved ' + jid + ' to ' + queue, 'success', 1500); cb(jid, queue); },
         erorr:   function() { flash('Failed to move ' + jid + ' to ' + queue); }
