@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
+import redis.clients.util.Pool;
 import redis.clients.util.SafeEncoder;
 
 import com.google.common.io.Resources;
@@ -16,10 +16,10 @@ import com.google.common.io.Resources;
 public class LuaScript {
     final Logger LOGGER = LoggerFactory.getLogger(LuaScript.class);
     public static final String SCRIPT = "qless.lua";
-    JedisPool jedisPool;
+    Pool<Jedis> jedisPool;
     protected byte[] scriptContents, sha1;
 
-    public LuaScript(JedisPool jedisPool) {
+    public LuaScript(Pool<Jedis> jedisPool) {
         this.jedisPool = jedisPool;
     }
     

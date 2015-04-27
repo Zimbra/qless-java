@@ -89,3 +89,12 @@ On certain Mac's like mine, that gets the prereqs out of the way, and allows you
 bundle install
 bundle exec rake spec
 ````
+
+Building
+========
+
+````
+$ git clone https://github.com/Zimbra/qless-java.git
+$ git submodule update --init
+$ mvn install -Dmaven.test.skip=true
+````
