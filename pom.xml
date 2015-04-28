@@ -5,7 +5,7 @@
 	<artifactId>qless</artifactId>
 	<name>Zimbra Qless Queue/Pipe Management</name>
 	<description>This is a Java-based client library for the qless Redis-backed job tracking system.</description>
-	<version>0.2.1-SNAPSHOT</version>
+	<version>0.2.1</version>
 	<packaging>pom</packaging>
 	<licenses>
 		<license>

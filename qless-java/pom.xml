@@ -5,7 +5,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
   <artifactId>qless-java</artifactId>
   <name>Zimbra Qless Queue/Pipe Management - Java Client</name>
   <description>This is a Java-based client library for the qless Redis-backed job tracking system.</description>
-  <version>0.2.1-SNAPSHOT</version>
+  <version>0.2.1</version>
   <packaging>jar</packaging>
   <properties>
     <slf4j.version>1.7.4</slf4j.version>
@@ -33,7 +33,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
   <parent>
     <groupId>com.zimbra.qless</groupId>
     <artifactId>qless</artifactId>
-    <version>0.2.1-SNAPSHOT</version>
+    <version>0.2.1</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
   <build>
